@@ -1,0 +1,36 @@
+div(ng-include='"components/navbar/navbar.html"')
+
+div.snippet__main(split-box="layoutConfig")
+div.snippet__footer
+script#snippet-html(type='text/ng-template').
+  <div class="snippet__box">
+    <div class="snippet__top">
+      <a href="javascript:;" class="fui-gear pull-right"></a>
+      html <span ng-show="html.isChange">*</span>
+    </div>
+    <div class="snippet__middle" snippet-editor="html"></div>
+  </div>
+script#snippet-css(type='text/ng-template').
+  <div class="snippet__box">
+  <div class="snippet__top">
+  <a href="javascript:;" class="fui-gear pull-right"></a>
+  css <span ng-show="css.isChange">*</span>
+  </div>
+  <div class="snippet__middle" snippet-editor="css"></div>
+  </div>
+script#snippet-javascript(type='text/ng-template').
+  <div class="snippet__box">
+  <div class="snippet__top">
+  <a href="javascript:;" class="fui-gear pull-right"></a>
+  javascript <span ng-show="javascript.isChange">*</span>
+  </div>
+  <div class="snippet__middle" snippet-editor="javascript"></div>
+  </div>
+script#snippet-result(type='text/ng-template').
+  <div class="snippet__box">
+  <div class="snippet__top">
+  <a href="javascript:;" class="fui-export pull-right"></a>
+  result
+  </div>
+  <div class="snippet__middle"></div>
+  </div>

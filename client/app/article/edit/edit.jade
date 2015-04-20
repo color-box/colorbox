@@ -1,4 +1,4 @@
-div.article(ng-controller='ArticleEditCtrl')
+div.article
   div.article__bar.navbar
     span.article__name.button-icon.text--overflow(ng-click='editName(true)', ng-show='!status.editingName', title='{{currentFile.name}}')
       | {{currentFile.name || defaultName}}

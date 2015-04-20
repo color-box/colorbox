@@ -13,6 +13,8 @@
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
     <!-- build:css(client) app/vendor.css -->
       <!-- bower:css -->
+      <link rel="stylesheet" href="bower_components/videojs/dist/video-js/video-js.css" />
+      <link rel="stylesheet" href="bower_components/flat-ui/dist/css/flat-ui.css" />
       <!-- endbower -->
     <!-- endbuild -->
     <!-- build:css({.tmp,client}) app/app.css -->
@@ -55,6 +57,9 @@
       <script src="bower_components/lodash/dist/lodash.compat.js"></script>
       <script src="bower_components/angular-socket-io/socket.js"></script>
       <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+      <script src="bower_components/videojs/dist/video-js/video.js"></script>
+      <script src="bower_components/flat-ui/dist/js/flat-ui.js"></script>
+      <script src="bower_components/showdown/src/showdown.js"></script>
       <!-- endbower -->
       <script src="socket.io-client/socket.io.js"></script>
     <!-- endbuild -->
@@ -68,6 +73,10 @@
           <script src="app/account/signup/signup.controller.js"></script>
           <script src="app/admin/admin.controller.js"></script>
           <script src="app/admin/admin.js"></script>
+          <script src="app/article/article.js"></script>
+          <script src="app/article/edit/edit.controller.js"></script>
+          <script src="app/article/list/list.controller.js"></script>
+          <script src="app/crud/crud.service.js"></script>
           <script src="app/main/main.controller.js"></script>
           <script src="app/main/main.js"></script>
           <script src="components/auth/auth.service.js"></script>
@@ -76,6 +85,7 @@
           <script src="components/mongoose-error/mongoose-error.directive.js"></script>
           <script src="components/navbar/navbar.controller.js"></script>
           <script src="components/socket/socket.service.js"></script>
+          <script src="components/splitbox/splitbox.js"></script>
           <!-- endinjector -->
         <!-- endbuild -->
 </body>

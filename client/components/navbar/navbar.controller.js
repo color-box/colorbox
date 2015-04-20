@@ -3,7 +3,7 @@
 angular.module('colorboxApp')
   .controller('NavbarCtrl', function ($scope, $location, Auth) {
     $scope.menu = [{
-      'title': 'Home',
+      'title': '主页',
       'link': '/'
     }];
 

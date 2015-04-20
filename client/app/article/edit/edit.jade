@@ -1,0 +1,70 @@
+div.article(ng-controller='ArticleEditCtrl')
+  div.article__bar.navbar
+    span.article__name.button-icon.text--overflow(ng-click='editName(true)', ng-show='!status.editingName', title='{{currentFile.name}}')
+      | {{currentFile.name || defaultName}}
+      span.article__mark(ng-show='currentFile.isChange') *
+    input.article__input(type='text', ng-model='currentFile.name', auto-focus='status.editingName', ng-show='status.editingName', ng-keydown='keydownSaveName($event)', ng-blur='saveName($event)')
+    button.article__button.button-icon(ng-repeat='fun in functions', title="{{fun.title + ' ' + fun.key}}", ng-click='opera(fun)', ng-disabled='disable(fun)')
+      span(class='{{fun.icon}}')
+  div.article__toggle.btn-group
+    button.btn.btn-default.btn-sm(ng-repeat='item in layoutConfig.boxs track by $index', ng-if='item.title', ng-class="{'btn-primary': !item.isHide}", ng-click='toggleBlock($index)') {{item.title}}
+  div.article__main(split-box='layoutConfig')
+script#article-list(type='text/ng-template').
+  <div class="article__list split-box">
+  <div class="article__item">
+  <span title="新建文档" ng-click="addArticle()" class="fui-plus button-icon"></span>
+  </div>
+  <div ng-repeat="file in files track by $index" ng-click="selectFile(file._id)" ng-class="{active: currentFile._id === file._id}" title="{{file.name}}" class="article__item text--overflow">
+  {{file.name || $parent.defaultName}}
+  <span ng-show="file.isChange">*</span>
+  <span class="fui-cross article__delete" ng-click="delArticle($event, file._id, $index)"></span>
+  </div>
+  </div>
+script#article-editor(type='text/ng-template').
+  <div article-editor="currentFile" class="article__editor split-box"></div>
+script#article-preview(type='text/ng-template').
+  <div class="split-box article__preview">
+  <span ng-class="{true: 'fui-menu4', false: 'fui-menu3'}[menu]" ng-click="menu = !menu" ng-init="menu = false" title="内容列表" class="article__menu-trigger fui-menu4"></span>
+  <ul ng-show="menu" class="article__menu">
+  <li ng-repeat="item in table" style="margin-left: {{(item[0] - 1) * 20 + 'px'}}; display: block;"><a anchor="'#' + item[2]">{{item[1]}}</a></li>
+  </ul>
+  <div markdown-preview="html" markdown-preview-table="table" class="content markdown-body"></div>
+  </div>
+script#edit-article-dialog(type='text/ng-template').
+  <div ng-show="dialogType === 'link'">
+  <form name="linkForm" ng-submit="submit()" ng-controller="editArticleLinkCtrl" class="form__full">
+  <div class="text--center">
+  <div ng-show="linkForm.link.$error.required" class="prompt__item--alert">请填写url</div>
+  <div ng-show="linkForm.link.$error.url" class="prompt__item--alert">格式错误</div>
+  </div>
+  <label for="edit-article-link-ctrl" class="form__label">链接</label>
+  <div class="form-group">
+  <input id="edit-article-link-ctrl" type="url" name="link" required="required" auto-focus="$parent.dialogType === 'link'" ng-model="link" placeholder="例如：http://colorbox.colorpeach.com" class="form-control"/>
+  </div>
+  <button type="submit" class="btn btn-primary">插入</button>
+  </form>
+  </div>
+  <div ng-show="dialogType === 'image'">
+  <form name="imageForm" ng-submit="submit()" ng-controller="editArticleImageCtrl" class="form__full">
+  <div class="text--center">
+  <div ng-show="imageForm.image.$error.required" class="prompt__item--alert">请填写url</div>
+  <div ng-show="imageForm.image.$error.url" class="prompt__item--alert">格式错误</div>
+  </div>
+  <label for="edit-article-image-ctrl" class="form__label">图片地址</label>
+  <div class="form-group">
+  <input id="edit-article-image-ctrl" type="url" name="image" required="required" auto-focus="$parent.dialogType === 'image'" ng-model="image" placeholder="例如：http://www.baidu.com/img/bd_logo1.png" class="form-control"/>
+  </div>
+  <button type="submit" class="btn btn-primary">插入</button>
+  </form>
+  </div>
+script#article-console(type='text/ng-template').
+  <div class="article__console split-box">
+  <div class="article__console-bar">控制台</div>
+  <ul class="article__console-box">
+  <li ng-repeat="prompt in prompts">
+  <span class="label" ng-class="{'success': 'palette-nephritis', 'error': 'palette-alizarin', 'doing': 'palette-belize-hole'}[prompt.status]">{{prompt.status}}</span>
+  {{prompt.message}}
+  <span class="article__console-time">{{prompt.time |  date:'yyyy-MM-dd HH:mm:ss'}}</span>
+  </li>
+  </ul>
+  </div>

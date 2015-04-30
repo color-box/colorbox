@@ -2,6 +2,7 @@
 
 var _ = require('lodash');
 var Snippet = require('./snippet.model');
+var page = require('./snippet.template');
 
 // Get list of snippets
 exports.index = function(req, res) {
@@ -9,6 +10,25 @@ exports.index = function(req, res) {
     if(err) { return handleError(res, err); }
     return res.json(200, snippets);
   });
+};
+
+exports.page = function(req, res){
+  Snippet.findById(req.params.id, function (err, snippet) {
+    if(err) { return handleError(res, err); }
+    if(!snippet) { return res.send(404); }
+    return res.end(page.generateSnippetHtml(snippet));
+  });
+};
+
+// Get list of snippets by user
+exports.listByUser = function(req, res) {
+  Snippet.find()
+    .where({user: req.user.name})
+    .limit(10)
+    .exec(function (err, snippets) {
+      if(err) { return handleError(res, err); }
+      return res.json(200, snippets);
+    });
 };
 
 // Get a single snippet
@@ -22,6 +42,7 @@ exports.show = function(req, res) {
 
 // Creates a new snippet in the DB.
 exports.create = function(req, res) {
+  req.body.user = req.user.name;
   Snippet.create(req.body, function(err, snippet) {
     if(err) { return handleError(res, err); }
     return res.json(201, snippet);

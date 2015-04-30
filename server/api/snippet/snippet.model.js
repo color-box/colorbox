@@ -6,17 +6,17 @@ var mongoose = require('mongoose'),
 var SnippetSchema = new Schema({
   name: String,
   user: String,
-  description: String,
+  desc: String,
   html: {
-    mode: String,
+    mode: {type: String, default: 'html'},
     content: String
   },
   css: {
-    mode: String,
+    mode: {type: String, default: 'css'},
     content: String
   },
   javascript: {
-    mode: String,
+    mode: {type: String, default: 'javascript'},
     content: String
   },
   comments: String,

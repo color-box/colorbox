@@ -1,36 +1,72 @@
 div(ng-include='"components/navbar/navbar.html"')
 
 div.snippet__main(split-box="layoutConfig")
-div.snippet__footer
-script#snippet-html(type='text/ng-template').
-  <div class="snippet__box">
-    <div class="snippet__top">
-      <a href="javascript:;" class="fui-gear pull-right"></a>
-      html <span ng-show="html.isChange">*</span>
-    </div>
-    <div class="snippet__middle" snippet-editor="html"></div>
-  </div>
-script#snippet-css(type='text/ng-template').
-  <div class="snippet__box">
-  <div class="snippet__top">
-  <a href="javascript:;" class="fui-gear pull-right"></a>
-  css <span ng-show="css.isChange">*</span>
-  </div>
-  <div class="snippet__middle" snippet-editor="css"></div>
-  </div>
-script#snippet-javascript(type='text/ng-template').
-  <div class="snippet__box">
-  <div class="snippet__top">
-  <a href="javascript:;" class="fui-gear pull-right"></a>
-  javascript <span ng-show="javascript.isChange">*</span>
-  </div>
-  <div class="snippet__middle" snippet-editor="javascript"></div>
-  </div>
-script#snippet-result(type='text/ng-template').
-  <div class="snippet__box">
-  <div class="snippet__top">
-  <a href="javascript:;" class="fui-export pull-right"></a>
-  result
-  </div>
-  <div class="snippet__middle"></div>
-  </div>
+div.snippet__footer.bg-primary
+  button.btn.btn-info.btn-sm(ng-click="open()") 片段描述
+  div.btn-group.pull-right
+    button.btn.btn-sm(ng-repeat="tab in layoutConfig.boxs track by $index", ng-if="tab.title", ng-click="toggleBlock($index)", ng-class="{'btn-primary': !tab.isHide, 'btn-default': tab.isHide}") {{tab.title}}
+script#snippet-html(type='text/ng-template')
+  .snippet__box
+    .snippet__top
+      a.fa.fa-gear(href='javascript:;', title='设置')
+      a.fa.fa-close.pull-right(href='javascript:;', title='关闭', ng-click='toggleBlock(0)')
+      |  html
+      span(ng-show='snippet.html.isChange') *
+    .snippet__middle(snippet-editor='html')
+script#snippet-css(type='text/ng-template')
+  .snippet__box
+    .snippet__top
+      a.fa.fa-gear(href='javascript:;', title='设置')
+      a.fa.fa-close.pull-right(href='javascript:;', title='关闭', ng-click='toggleBlock(1)')
+      |  css
+      span(ng-show='snippet.css.isChange') *
+    .snippet__middle(snippet-editor='css')
+script#snippet-javascript(type='text/ng-template')
+  .snippet__box
+    .snippet__top
+      a.fa.fa-gear(href='javascript:;', title='设置')
+      a.fa.fa-close.pull-right(href='javascript:;', title='关闭', ng-click='toggleBlock(2)')
+      |  javascript
+      span(ng-show='snippet.javascript.isChange') *
+    .snippet__middle(snippet-editor='javascript')
+script#snippet-result(type='text/ng-template')
+  .snippet__box
+    .snippet__top
+      a.fa.fa-close.pull-right(href='javascript:;', title='关闭', ng-click='toggleBlock(3)')
+      a.fa.fa-external-link.pull-right(ng-href='{{preview}}', target='_blank', title='在新标签打开')
+      a.fa.fa-refresh(href='javascript:;', ng-click='reloadIframe();', title='刷新')
+      |   result
+    .snippet__middle.snippet__result
+      iframe(ng-src='{{preview}}', width='100%', height='100%', frameborder='0')
+script#snippet-detail(type="text/ng-template")
+  .modal-header
+    h4.modal-title 代码片段描述
+  .modal-body
+    form
+      .form-group
+        label(for='') 名称
+        input.form-control(type='text', ng-model='data.name')
+      .form-group
+        label(for='') 描述
+        textarea.form-control(ng-model='data.desc')
+  .modal-footer
+    button.btn.btn-primary(ng-click='submit()') 保存
+    button.btn.btn-default(ng-click='cancel()') 关闭
+script#snippet-settings(type="text/ng-template")
+  .modal-header
+    h4.modal-title 设置
+  .modal-body
+    .form-group
+      label(for='') 预编译
+      label.checkbox(for='checkbox{{$index}}', ng-repeat="mode in lang.modes track by $index")
+        input(type='checkbox', value='mode', data-toggle='checkbox', id="checkbox{{$index}}")
+        span.icons
+          span.icon-unchecked
+          span.icon-checked
+        |  mode
+    .form-group(ng-if="lang.ext")
+      label(for='')
+      textarea.form-control(ng-model='data.desc')
+  .modal-footer
+    button.btn.btn-primary(ng-click='submit()') 保存
+    button.btn.btn-default(ng-click='cancel()') 关闭

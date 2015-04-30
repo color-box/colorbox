@@ -11,6 +11,17 @@ exports.index = function(req, res) {
   });
 };
 
+// Get list of snippets by user
+exports.listByUser = function(req, res) {
+  Article.find()
+    .where({user: req.user.name})
+    .limit(10)
+    .exec(function (err, articles) {
+      if(err) { return handleError(res, err); }
+      return res.json(200, articles);
+    });
+};
+
 // Get a single article
 exports.show = function(req, res) {
   Article.findById(req.params.id, function (err, article) {

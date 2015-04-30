@@ -1,7 +1,10 @@
 'use strict';
 
 angular.module('colorboxApp')
-  .config(function ($stateProvider) {
+  .config(function ($stateProvider, $urlRouterProvider) {
+    $urlRouterProvider
+      .when('/profile', '/profile/snippets')
+
     $stateProvider
       .state('login', {
         url: '/login',
@@ -18,5 +21,28 @@ angular.module('colorboxApp')
         templateUrl: 'app/account/settings/settings.html',
         controller: 'SettingsCtrl',
         authenticate: true
+      })
+      .state('profile', {
+        url: '/profile',
+        templateUrl: 'app/account/profile/profile.html',
+        controller: 'ProfileCtrl'
+      })
+      .state('profile.articles', {
+        url: '/articles',
+        views: {
+          '': {
+            templateUrl: 'app/article/list/list.html',
+            controller: 'ArticleListCtrl'
+          }
+        }
+      })
+      .state('profile.snippets', {
+        url: '/snippets',
+        views: {
+          '': {
+            templateUrl: 'app/snippet/list/list.html',
+            controller: 'SnippetListCtrl'
+          }
+        }
       });
   });

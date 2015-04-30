@@ -1,20 +1,13 @@
 'use strict';
 
 angular.module('colorboxApp')
-  .directive('snippetEditor', function () {
+  .directive('snippetEditor', function ($timeout) {
     return {
       restrict: 'A',
       link: function (scope, element, attrs) {
-        var config = scope[attrs.snippetEditor];
+        var config = {};
         var editor = ace.edit(element[0]);
-
-        scope[attrs.snippetEditor].editor = editor;
-
-        editor.renderer.setShowGutter(false);
-        editor.renderer.setPadding(10);
-        editor.session.highlight(false);
-        editor.setTheme('ace/theme/chrome');
-        editor.session.setMode("ace/mode/" + config.mode);
+        var resizeTimer = 0;
 
         editor.on('input', function(){
           if(!config) return;
@@ -27,12 +20,47 @@ angular.module('colorboxApp')
           scope.$apply();
         });
 
+        var watch = scope.$watch('snippet.' + attrs.snippetEditor, function(c){
+          if(!c){
+            return;
+          }
+
+          watch();
+
+          config = c;
+          editor.setSession(ace.createEditSession(config.content || ''));
+          //editor.renderer.setShowGutter(false);
+          editor.renderer.setPadding(10);
+          editor.session.highlight(false);
+          editor.setTheme('ace/theme/chrome');
+          editor.session.setMode("ace/mode/" + config.mode);
+        });
+
         scope.$on('editorSaved:' + attrs.snippetEditor, function(){
           editor.session.getUndoManager().markClean();
-          safeApply(function(){
-            config.isChange = false;
-          });
+          config.isChange = false;
         });
+
+        //保存
+        editor.commands.addCommand({
+          name: '保存',
+          bindKey: {win: 'Ctrl-S',  mac: 'Command-S'},
+          exec: function(editor) {
+            scope.$emit('editorSaving', attrs.snippetEditor, editor.getValue());
+          },
+          readOnly: false
+        });
+
+        scope.$on('resizeUpdate', resize);
+
+        function resize(){
+          if(resizeTimer){
+            resizeTimer = $timeout.cancel(resizeTimer);
+          }
+          $timeout(function(){
+            editor.resize();
+          }, 300);
+        }
       }
     };
   });

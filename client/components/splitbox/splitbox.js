@@ -151,7 +151,9 @@
                * @description
                * 设置动画类名
                */
-              animateClass: ''
+              animateClass: '',
+              onResize: angular.noop,
+              resizeBarZ: 1000
             };
 
             angular.extend(config, scope[attrs.splitBox]);
@@ -266,7 +268,7 @@
                 };
                 var relative = point;
 
-                $resizeOverlay.css({display: 'block'});
+                element.parent().append($resizeOverlay);
 
                 $parent.on(eventsMap[device].move, function(e){
                   point = {
@@ -287,9 +289,10 @@
                 });
 
                 $parent.on(eventsMap[device].up, function(e){
-                  $resizeOverlay.css({display: 'none'});
+                  $resizeOverlay.remove();
                   $parent.off(eventsMap[device].move);
                   $parent.off(eventsMap[device].up);
+                  bar.root.config.onResize(bar);
                 });
               });
             };
@@ -547,7 +550,8 @@
               width: 'auto',
               left: 'auto',
               height: 'auto',
-              top: 'auto'
+              top: 'auto',
+              zIndex: this.root.config.resizeBarZ
             };
             var box = this.prev;
             var barWidth = this.root.config.barWidth;

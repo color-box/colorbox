@@ -1,0 +1,18 @@
+div(ng-include='"components/navbar/navbar.html"')
+.panel
+  .panel-body.text-center
+    img.img-circle(ng-src="http://identicon.relucks.org/{{ getCurrentUser().name }}?size=128px", width="128px", height="128px")
+    h3 {{ getCurrentUser().name }}
+    p
+      a(href="/settings")
+        span.fa.fa-pencil
+        |  修改个人信息
+.container
+  ul.nav.nav-tabs.nav-justified
+    li(ng-class="{active: $state.includes('profile.snippets')}")
+      a(href="/profile/snippets") 代码片段
+    li(ng-class="{active: $state.includes('profile.articles')}")
+      a(href="/profile/articles") 文档
+    li(ng-class="{active: $state.includes('profile.apps')}")
+      a(href="/profile/apps") 应用
+  div.panel.row(ui-view="")

@@ -1,2 +1,9 @@
-div(ng-include='"components/navbar/navbar.html"')
-.container
+div.panel-heading
+  a.btn.btn-primary(href="/article/edit")
+    span.fa.fa-plus
+    |  新增
+div.panel-body
+  ul.list-group
+    li.list-group-item(ng-repeat="article in articles")
+      a(href="/article/edit?_id={{article._id}}")
+        strong {{article.name || '未命名'}}

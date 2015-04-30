@@ -1,0 +1,9 @@
+div.panel-heading
+  a.btn.btn-primary(href="/snippet/edit")
+    span.fa.fa-plus
+    |  新增
+div.panel-body
+  ul.list-group
+    li.list-group-item(ng-repeat="snippet in snippets")
+      a(href="/snippet/edit?_id={{snippet._id}}")
+        strong {{snippet.name || '片段_' + snippet._id}}

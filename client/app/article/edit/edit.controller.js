@@ -67,28 +67,28 @@ angular.module('colorboxApp')
     animateClass: 'animate',
     boxs: [
       {id: 1, size: 60},
-      {id: 4, parentId: 1, template: 'article-list', title: '列表', size: 20, isHide: false},
+      {id: 4, parentId: 1, template: 'article-list', title: '列表', size: 20, isHide: true},
       {id: 3, parentId: 1, template: 'article-editor', title: '编辑', size: 40, isHide: false},
       {id: 2, parentId: 1, template: 'article-preview', title: '预览', size: 40, isHide: false},
-      {id: 5, template: 'article-console', title: '控制台', size: 40, isHide: false}
+      {id: 5, template: 'article-console', title: '日志', size: 40, isHide: true}
     ]
   })
 
   .value('article::functions',
   [
-    {title: '保存', icon: 'fui-floppy-disk', command: 'save', key: 'Ctrl-S', disable: '!currentFile.isChange || layoutConfig.items[1].hide'},
-    {title: '加粗 <strong>', icon: 'fui-bold', command: 'replaceText', params: ['**%s**', '加粗文本'], key: 'Ctrl-B'},
-    {title: '斜体 <em>', icon: 'fui-italic', command: 'replaceText', params: ['_%s_', '斜体文本'], key: 'Ctrl-I'},
-    {title: '超链接 <a>', icon: 'fui-link', command: 'dialogOpen', key: 'Ctrl-L', params: 'link'},
-    {title: '图片 <img>', icon: 'fui-image', command: 'dialogOpen', key: 'Ctrl-Q', params: 'image'},
-    {title: '块引用 <blockquote>', icon: 'fui-indent-increase', command: 'replaceText', params: ['\n> %s\n', '引用'], key: 'Ctrl-K'},
-    {title: '代码 <code>', icon: 'fui-embed', command: 'replaceText', params: ['\n```\n%s\n```\n', '代码'], key: 'Ctrl-G'},
-    {title: '有序列表 <ol>', icon: 'fui-list-numbered', command: 'replaceText', params: ['\n1. %s\n', '列表项'], key: 'Ctrl-O'},
-    {title: '无序列表 <ul>', icon: 'fui-list', command: 'replaceText', params: ['\n* %s\n', '列表项'], key: 'Ctrl-U'},
-    {title: '标题 <h1>~<h6>', icon: 'fui-text-height', command: 'replaceText', params: ['\n# %s\n', '标题'], key: 'Ctrl-H'},
-    {title: '分隔线 <hr>', icon: 'fui-page-break', command: 'replaceText', params: ['\n***\n', ''], key: 'Ctrl-R'},
-    {title: '撤销', icon: 'fui-undo2', command: 'editor.undo', disable: '!editor.session.getUndoManager().hasUndo() || layoutConfig.items[1].hide', key: 'Ctrl-Z'},
-    {title: '还原', icon: 'fui-redo2', command: 'editor.redo', disable: '!editor.session.getUndoManager().hasRedo() || layoutConfig.items[1].hide', key: 'Ctrl-Y'},
+    {title: '保存', icon: 'fa fa-floppy-o', command: 'save', key: 'Ctrl-S', disable: '!currentFile.isChange || layoutConfig.items[1].hide'},
+    {title: '加粗 <strong>', icon: 'fa fa-bold', command: 'replaceText', params: ['**%s**', '加粗文本'], key: 'Ctrl-B'},
+    {title: '斜体 <em>', icon: 'fa fa-italic', command: 'replaceText', params: ['_%s_', '斜体文本'], key: 'Ctrl-I'},
+    {title: '超链接 <a>', icon: 'fa fa-link', command: 'dialogOpen', key: 'Ctrl-L', params: 'link'},
+    {title: '图片 <img>', icon: 'fa fa-image', command: 'dialogOpen', key: 'Ctrl-Q', params: 'image'},
+    {title: '块引用 <blockquote>', icon: 'fa fa-quote-right', command: 'replaceText', params: ['\n> %s\n', '引用'], key: 'Ctrl-K'},
+    {title: '代码 <code>', icon: 'fa fa-code', command: 'replaceText', params: ['\n```\n%s\n```\n', '代码'], key: 'Ctrl-G'},
+    {title: '有序列表 <ol>', icon: 'fa fa-list-ol', command: 'replaceText', params: ['\n1. %s\n', '列表项'], key: 'Ctrl-O'},
+    {title: '无序列表 <ul>', icon: 'fa fa-list-ul', command: 'replaceText', params: ['\n* %s\n', '列表项'], key: 'Ctrl-U'},
+    {title: '标题 <h1>~<h6>', icon: 'fa fa-header', command: 'replaceText', params: ['\n# %s\n', '标题'], key: 'Ctrl-H'},
+    {title: '分隔线 <hr>', icon: 'fa fa-ellipsis-h ', command: 'replaceText', params: ['\n***\n', ''], key: 'Ctrl-R'},
+    {title: '撤销', icon: 'fa fa-undo', command: 'editor.undo', disable: '!editor.session.getUndoManager().hasUndo() || layoutConfig.items[1].hide', key: 'Ctrl-Z'},
+    {title: '还原', icon: 'fa fa-repeat', command: 'editor.redo', disable: '!editor.session.getUndoManager().hasRedo() || layoutConfig.items[1].hide', key: 'Ctrl-Y'},
   ])
 
   .controller('ArticleEditCtrl',
@@ -121,6 +121,10 @@ angular.module('colorboxApp')
               }
             }
           });
+      }else{
+        $timeout(function(){
+          $scope.addArticle();
+        }, 0);
       }
 
       angular.forEach(functions.slice(1, -2), function(n){
@@ -666,16 +670,16 @@ angular.module('colorboxApp')
 //                         strList.splice(i, 1, generateFlowChart(n.code));
 //                     }
 //                 }else if(n.type){
-          if(typeof hljs === 'undefined'){
-            var defered = $q.defer();
-            promises.push(defered.promise);
-            require(['highlight'], function(){
-              strList.splice(i, 1, generateHighlight(n.type, n.code));
-              defered.resolve();
-            });
-          }else{
+//          if(typeof hljs === 'undefined'){
+//            var defered = $q.defer();
+//            promises.push(defered.promise);
+//            require(['highlight'], function(){
+//              strList.splice(i, 1, generateHighlight(n.type, n.code));
+//              defered.resolve();
+//            });
+//          }else{
             strList.splice(i, 1, generateHighlight(n.type, n.code));
-          }
+          //}
 //                 }
         });
 

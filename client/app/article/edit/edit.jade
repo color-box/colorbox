@@ -59,7 +59,7 @@ script#edit-article-dialog(type='text/ng-template').
   </div>
 script#article-console(type='text/ng-template').
   <div class="article__console split-box">
-  <div class="article__console-bar">控制台</div>
+  <div class="article__console-bar">日志</div>
   <ul class="article__console-box">
   <li ng-repeat="prompt in prompts">
   <span class="label" ng-class="{'success': 'palette-nephritis', 'error': 'palette-alizarin', 'doing': 'palette-belize-hole'}[prompt.status]">{{prompt.status}}</span>

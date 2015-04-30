@@ -17,7 +17,8 @@
     "angular-ui-router": "~0.2.10",
     "flat-ui": "~2.2.2",
     "ace-builds": "~1.1.9",
-    "showdown": "~0.4.0"
+    "showdown": "~0.4.0",
+    "highlightjs": "~8.5.0"
   },
   "devDependencies": {
     "angular-mocks": ">=1.2.*",

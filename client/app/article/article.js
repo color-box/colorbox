@@ -6,11 +6,7 @@ angular.module('colorboxApp')
       .state('articleEdit', {
         url: '/article/edit',
         templateUrl: 'app/article/edit/edit.html',
-        controller: 'ArticleEditCtrl'
-      })
-      .state('articleList', {
-        url: '/article/list',
-        templateUrl: 'app/article/list/list.html',
-        controller: 'ArticleListCtrl'
+        controller: 'ArticleEditCtrl',
+        authenticate: true
       });
   });

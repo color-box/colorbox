@@ -52,4 +52,9 @@ angular.module('colorboxApp', [
         }
       });
     });
+
+    // 配置ace路径
+    ace.config.set('themePath', '/bower_components/ace-builds/src-min/');
+    ace.config.set('workerPath', '/bower_components/ace-builds/src-min/');
+    ace.config.set('modePath', '/bower_components/ace-builds/src-min/');
   });

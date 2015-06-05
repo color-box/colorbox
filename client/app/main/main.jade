@@ -1,28 +1,49 @@
 div(ng-include='"components/navbar/navbar.html"')
 
-header#banner.hero-unit.bg-primary
+header#banner.hero-unit.bg-primary(style="display: none;")
   .container
     img(src='assets/images/colorbox.png', alt='欢迎来到colorbox')
     h1 Hi, colorbox
     p.lead 你的前端收纳盒
 
 .container
-  .row.text-center.main__content
-    .col-sm-4.panel
-      a(href="/snippet/edit")
-        .panel-body
-          span.fa.fa-code
-          |  代码片段
-    .col-sm-4.panel
-      a(href="/article/edit")
-        .panel-body
-          span.fa.fa-edit
-          |  文档编辑
-    .col-sm-4.panel
-      a
-        .panel-body
-          span.fa.fa-th-large
-          |  web应用
+  .main__content
+    .row
+      .col-sm-2.panel.text-center
+        a(href="/article/edit")
+          .panel-body
+            span.fa.fa-edit
+            |  文档编辑
+      .col-sm-4
+        .input-group
+          input.form-control(type="text")
+          span.input-group-btn
+            button.btn.btn-primary 搜索
+    .row
+      .col-sm-12
+        .col-sm-4(ng-repeat="article in articles")
+          .panel.panel-default
+            .panel-body
+              a(href="/article/view?_id={{article._id}}")
+                strong {{article.name || '未命名'}}
+    //.row
+    //  .col-sm-2.panel.text-center
+    //    a(href="/snippet/edit")
+    //      .panel-body
+    //        span.fa.fa-code
+    //        |  代码片段
+    //.row
+    //  .col-sm-12
+    //    .col-sm-4(ng-repeat="snippet in snippets")
+    //      .panel.panel-default
+    //        .panel-body
+    //          a(href="/snippet/view?_id={{snippet._id}}")
+    //            strong {{snippet.name || '片段_' + snippet._id}}
+    //.col-sm-4.panel
+    //  a
+    //    .panel-body
+    //      span.fa.fa-th-large
+    //      |  slide
   //.row
   //  .col-lg-12
   //    h1.page-header Features:

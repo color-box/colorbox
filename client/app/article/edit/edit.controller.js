@@ -131,6 +131,10 @@ angular.module('colorboxApp')
         n.disable = 'layoutConfig.boxs[2].isHide';
       });
 
+      layoutConfig.onResize = function(){
+        $scope.$broadcast('resizeUpdate');
+      }
+
       $scope.layoutConfig = layoutConfig;
       $scope.functions = functions;
       $scope.defaultName = '未命名';
@@ -200,6 +204,7 @@ angular.module('colorboxApp')
 
         layoutConfig.boxs[i].isHide = hide;
         box.hide(hide);
+        $scope.$broadcast('resizeUpdate');
       };
 
       $scope.editName = function(mark){

@@ -5,10 +5,12 @@ var Article = require('./article.model');
 
 // Get list of articles
 exports.index = function(req, res) {
-  Article.find(function (err, articles) {
-    if(err) { return handleError(res, err); }
-    return res.json(200, articles);
-  });
+  Article.find()
+    .limit(10)
+    .exec(function (err, articles) {
+      if(err) { return handleError(res, err); }
+      return res.json(200, articles);
+    });
 };
 
 // Get list of snippets by user
@@ -33,6 +35,7 @@ exports.show = function(req, res) {
 
 // Creates a new article in the DB.
 exports.create = function(req, res) {
+  req.body.user = req.user.name;
   Article.create(req.body, function(err, article) {
     if(err) { return handleError(res, err); }
     return res.json(201, article);

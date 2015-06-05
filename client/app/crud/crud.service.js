@@ -18,6 +18,9 @@ angular.module('colorboxApp')
         },
         getArticles: function(){
           return $http.get('/api/articles/user');
+        },
+        getAllArticles: function(){
+          return $http.get('/api/articles/');
         }
       },
       snippets: {
@@ -35,6 +38,9 @@ angular.module('colorboxApp')
         },
         getSnippets: function(){
           return $http.get('/api/snippets/user');
+        },
+        getAllSnippets: function(){
+          return $http.get('/api/snippets/');
         }
       }
     };

@@ -51,6 +51,14 @@ angular.module('colorboxApp')
           readOnly: false
         });
 
+        angular.element(element[0].querySelector('.ace_gutter')).bind('click', function(e){
+          var $target = angular.element(e.target);
+          if($target.hasClass('ace_gutter-cell')){
+            var line = +$target.text() - 1;
+            editor.session[$target.hasClass('ace_breakpoint') ? 'clearBreakpoint' : 'setBreakpoint'](line);
+          }
+        });
+
         scope.$on('resizeUpdate', resize);
 
         function resize(){

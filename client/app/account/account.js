@@ -27,6 +27,12 @@ angular.module('colorboxApp')
         templateUrl: 'app/account/profile/profile.html',
         controller: 'ProfileCtrl'
       })
+      .state('profile.messages', {
+        url: '/messages',
+        templateUrl: 'app/account/message/message.html',
+        controller: 'MessageCtrl',
+        authenticate: true
+      })
       .state('profile.articles', {
         url: '/articles',
         views: {
@@ -42,6 +48,15 @@ angular.module('colorboxApp')
           '': {
             templateUrl: 'app/snippet/list/list.html',
             controller: 'SnippetListCtrl'
+          }
+        }
+      })
+      .state('profile.notes', {
+        url: '/notes',
+        views: {
+          '': {
+            templateUrl: 'app/note/list/list.html',
+            controller: 'NoteListCtrl'
           }
         }
       });

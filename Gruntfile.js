@@ -358,11 +358,11 @@ module.exports = function (grunt) {
           src: [
             '*.{ico,png,txt}',
             '.htaccess',
-            'bower_components/ace-build/*',
-            'bower_components/flat-ui/*',
-            'bower_components/font-awesome/*',
-            'bower_components/highlightjs/*',
-            'bower_components/showdown/*',
+            'bower_components/ace-builds/src-min/**/*',
+            'bower_components/flat-ui/**/*',
+            'bower_components/font-awesome/**/*',
+            'bower_components/highlightjs/**/*',
+            'bower_components/showdown/**/*',
             'assets/images/{,*/}*.{webp}',
             'assets/fonts/**/*',
             'index.html'

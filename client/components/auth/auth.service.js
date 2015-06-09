@@ -4,7 +4,9 @@ angular.module('colorboxApp')
   .factory('Auth', function Auth($location, $rootScope, $http, User, $cookieStore, $q) {
     var currentUser = {};
     if($cookieStore.get('token')) {
-      currentUser = User.get();
+      currentUser = User.get(function(){
+        $rootScope.getUnreadCount();
+      });
     }
 
     return {
@@ -26,7 +28,9 @@ angular.module('colorboxApp')
         }).
         success(function(data) {
           $cookieStore.put('token', data.token);
-          currentUser = User.get();
+          currentUser = User.get(function(){
+            $rootScope.getUnreadCount();
+          });
           deferred.resolve(data);
           return cb();
         }).

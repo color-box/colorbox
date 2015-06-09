@@ -25,11 +25,13 @@ script#article-editor(type='text/ng-template').
   </div>
 script#article-preview(type='text/ng-template').
   <div class="split-box article__preview">
+  <div>
   <span ng-class="{true: 'fui-menu4', false: 'fui-menu3'}[menu]" ng-click="menu = !menu" ng-init="menu = false" title="内容列表" class="article__menu-trigger fui-menu4"></span>
   <ul ng-show="menu" class="article__menu">
   <li ng-repeat="item in table" style="margin-left: {{(item[0] - 1) * 20 + 'px'}}; display: block;"><a anchor="'#' + item[2]">{{item[1]}}</a></li>
   </ul>
   <div markdown-preview="html" markdown-preview-table="table" class="content markdown-body"></div>
+  </div>
   </div>
 script#edit-article-dialog(type='text/ng-template').
   <div ng-show="dialogType === 'link'">

@@ -3,16 +3,18 @@ div(ng-include='"components/navbar/navbar.html"')
   .panel-body.text-center
     img.img-circle(ng-src="http://identicon.relucks.org/{{ getCurrentUser().name }}?size=128px", width="128px", height="128px")
     h3 {{ getCurrentUser().name }}
-    p
-      a(href="/settings")
+    div.text-center
+      a.btn.btn-default.btn-sm.mrs(href="/settings", title="修改个人信息")
         span.fa.fa-pencil
-        |  修改个人信息
 .container
   ul.nav.nav-tabs.nav-justified
     li(ng-class="{active: $state.includes('profile.snippets')}")
       a(href="/profile/snippets") 代码片段
     li(ng-class="{active: $state.includes('profile.articles')}")
       a(href="/profile/articles") 文档
-    li(ng-class="{active: $state.includes('profile.apps')}")
-      a(href="/profile/apps") 应用
+    li(ng-class="{active: $state.includes('profile.notes')}")
+      a(href="/profile/notes") 笔记
+    li(ng-class="{active: $state.includes('profile.messages')}")
+      a(href="/profile/messages") 消息
+        span.badge.mlm(ng-show="unreadCount()") {{unreadCount()}}
   div.panel.row(ui-view="")

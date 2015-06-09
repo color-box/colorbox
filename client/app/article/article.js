@@ -3,6 +3,11 @@
 angular.module('colorboxApp')
   .config(function ($stateProvider) {
     $stateProvider
+      .state('articleSquare', {
+        url: '/article/square',
+        templateUrl: 'app/article/square/square.html',
+        controller: 'ArticleSquareCtrl'
+      })
       .state('articleEdit', {
         url: '/article/edit',
         templateUrl: 'app/article/edit/edit.html',

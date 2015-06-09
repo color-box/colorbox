@@ -3,3 +3,5 @@ div.article
     button.btn.btn-default.btn-sm(ng-repeat='item in layoutConfig.boxs track by $index', ng-if='item.title', ng-class="{'btn-primary': !item.isHide}", ng-click='toggleBlock($index)') {{item.title}}
   div.article__main(split-box='layoutConfig')
 include ../../template/template.jade
+script#article-comments(type='text/ng-template')
+  div(comments="currentFile.comments", on-comment="comment(data)")

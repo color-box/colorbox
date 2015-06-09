@@ -1,0 +1,14 @@
+.panel-heading
+  button.btn.btn-primary.hide 全部标记为已读
+.panel-body
+  div.alert.alert-warning.text-center(ng-hide="messages.length || loading") 您还没有消息
+  div.alert.text-center(ng-show="loading") 加载中...
+  table.table.table-hover(ng-show="messages.length")
+    tr(ng-repeat="message in messages")
+      td(ng-class="{true: 'active', false: 'warning'}[message.read]")
+        span(ng-repeat="info in message.infos")
+          a(ng-if="info.url", href="{{info.url}}") &nbsp;{{info.text}}
+          | &nbsp;{{info.url ? '' : info.text}}
+        button.pull-right.btn.btn-primary.btn-xs(ng-click="read(message)", ng-if="!message.read") 标记为已读
+  div.pagination.pull-right(ng-controller="MessagePaginationCtrl")
+    pagination(total-items="total", ng-model="currentPage", items-per-page="pageSize", ng-change="change()", previous-text="上一页",next-text="下一页")

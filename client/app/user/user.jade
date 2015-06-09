@@ -1,0 +1,9 @@
+div(ng-include='"components/navbar/navbar.html"')
+.container.mtl
+  .panel
+    .panel-body
+      img.img-circle.pull-left.mrl(ng-src="http://identicon.relucks.org/{{ currentUser }}?size=128px", width="128px", height="128px")
+      h3 {{ currentUser }}
+  ul.nav.nav-tabs.nav-justified
+    li(ng-repeat="tab in tabs", ng-class="{active: isActive(tab.name)}")
+      a(href="/user/{{ currentUser }}/{{tab.name}}") {{tab.text}}

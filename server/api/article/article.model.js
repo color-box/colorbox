@@ -6,7 +6,14 @@ var mongoose = require('mongoose'),
 var ArticleSchema = new Schema({
   name: String,
   user: String,
-  content: String
+  content: String,
+  comments: [{content: String, date: Date, user: String, reply: String}],
+  stars: Object,
+  starsCount: {type: Number, default: 0},
+  viewCount: {type: Number, default: 0},
+  createDate: {type: Date, default: Date.now},
+  publish: {type: Boolean, default: false},
+  publishDate: {type: Date}
 });
 
 module.exports = mongoose.model('Article', ArticleSchema);

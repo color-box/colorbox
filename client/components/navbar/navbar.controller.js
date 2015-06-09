@@ -3,12 +3,16 @@
 angular.module('colorboxApp')
   .controller('NavbarCtrl', function ($scope, $location, Auth) {
     $scope.menu = [{
-        'title': 'Note',
-        'link': '/articles'
+        'title': 'Article',
+        'link': '/article/square'
       },
       {
         'title': 'Code',
-        'link': '/snippets'
+        'link': '/snippet/square'
+      },
+      {
+        'title': 'Note',
+        'link': '/note/square'
       }
     ];
 

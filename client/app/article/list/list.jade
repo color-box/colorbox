@@ -3,7 +3,22 @@ div.panel-heading
     span.fa.fa-plus
     |  新增
 div.panel-body
-  ul.list-group
-    li.list-group-item(ng-repeat="article in articles")
-      a(href="/article/edit?_id={{article._id}}")
-        strong {{article.name || '未命名'}}
+  div.row
+    div.alert.alert-warning.text-center(ng-hide="articles.length || loading") 您还没有添加文章
+    div.alert.text-center(ng-show="loading") 加载中...
+    div.col-md-4(ng-repeat="article in articles")
+      div.panel.panel-default
+        div.panel-body.square__body
+          a.square__link.square__icon--small(href="/article/edit?_id={{article._id}}", title="编辑")
+            span.fa.fa-pencil
+          span.square__del.fa.fa-trash(ng-click="del(article._id, article.name || '未命名')")
+          a(href="/article/edit?_id={{article._id}}")
+            h4 {{article.name || '未命名'}}
+        div.panel-footer.clearfix
+          a.fa.fa-rocket(href="javascript:;", title="发布", ng-click="publish(article)", ng-if="!article.publish")
+          small.pull-right
+            a.fa.fa-comment(title="{{article.comments.length || 0}}条评论", href="/article/view?_id={{article._id}}") &nbsp;{{article.comments.length || 0}}
+            span.fa.fa-eye.mll(title="有{{snippet.viewCount}}次浏览") &nbsp;{{article.viewCount}}
+            span.fa.fa-heart.mll(title="有{{snippet.starsCount}}个人喜欢") &nbsp;{{article.starsCount}}
+  div.pagination.pull-right(ng-controller="ArticleListPaginationCtrl")
+    pagination(total-items="total", ng-model="currentPage", items-per-page="pageSize", ng-change="change()", previous-text="上一页",next-text="下一页")

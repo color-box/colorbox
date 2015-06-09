@@ -19,9 +19,14 @@ var SnippetSchema = new Schema({
     mode: {type: String, default: 'javascript'},
     content: String
   },
-  comments: String,
+  comments: [{content: String, date: Date, user: String, reply: String}],
   stars: Object,
-  fork: Boolean
+  starsCount: {type: Number, default: 0},
+  viewCount: {type: Number, default: 0},
+  createDate: {type: Date, default: Date.now},
+  fork: Boolean,
+  publish: {type: Boolean, default: false},
+  publishDate: {type: Date}
 });
 
 module.exports = mongoose.model('Snippet', SnippetSchema);

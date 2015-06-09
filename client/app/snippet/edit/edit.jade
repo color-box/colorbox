@@ -8,24 +8,24 @@ div.snippet__footer.bg-primary
 script#snippet-html(type='text/ng-template')
   .snippet__box
     .snippet__top
-      a.fa.fa-gear(href='javascript:;', title='设置')
       a.fa.fa-close.pull-right(href='javascript:;', title='关闭', ng-click='toggleBlock(0)')
+      a.fa.fa-gear(href='javascript:;', title='设置')
       |  html
       span(ng-show='snippet.html.isChange') *
     .snippet__middle(snippet-editor='html')
 script#snippet-css(type='text/ng-template')
   .snippet__box
     .snippet__top
-      a.fa.fa-gear(href='javascript:;', title='设置')
       a.fa.fa-close.pull-right(href='javascript:;', title='关闭', ng-click='toggleBlock(1)')
+      a.fa.fa-gear(href='javascript:;', title='设置')
       |  css
       span(ng-show='snippet.css.isChange') *
     .snippet__middle(snippet-editor='css')
 script#snippet-javascript(type='text/ng-template')
   .snippet__box
     .snippet__top
-      a.fa.fa-gear(href='javascript:;', title='设置')
       a.fa.fa-close.pull-right(href='javascript:;', title='关闭', ng-click='toggleBlock(2)')
+      a.fa.fa-gear(href='javascript:;', title='设置')
       |  javascript
       span(ng-show='snippet.javascript.isChange') *
     .snippet__middle(snippet-editor='javascript')

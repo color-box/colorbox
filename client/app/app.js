@@ -7,7 +7,8 @@ angular.module('colorboxApp', [
   'btford.socket-io',
   'ui.router',
   'ui.bootstrap',
-  'splitbox'
+  'splitbox',
+  'toaster'
 ])
   .config(function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider) {
     $urlRouterProvider
@@ -15,6 +16,22 @@ angular.module('colorboxApp', [
 
     $locationProvider.html5Mode(true);
     $httpProvider.interceptors.push('authInterceptor');
+    $httpProvider.interceptors.push('errorInterceptor');
+  })
+
+  .factory('errorInterceptor', function( $q, toaster){
+    return {
+      responseError: function(response){
+        if(response.status === 403) {
+          toaster.pop({
+            type: 'error',
+            title: '没有权限',
+            body: '您没有权限进行此操作'
+          });
+        }
+        return $q.reject(response);
+      }
+    };
   })
 
   .factory('authInterceptor', function ($rootScope, $q, $cookieStore, $location) {
@@ -25,11 +42,19 @@ angular.module('colorboxApp', [
         if ($cookieStore.get('token')) {
           config.headers.Authorization = 'Bearer ' + $cookieStore.get('token');
         }
+        $rootScope.waiting++;
         return config;
+      },
+
+      response: function(response){
+        $rootScope.waiting--;
+        return response;
       },
 
       // Intercept 401s and redirect you to login
       responseError: function(response) {
+        $rootScope.waiting--;
+
         if(response.status === 401) {
           $location.path('/login');
           // remove any stale tokens
@@ -43,7 +68,7 @@ angular.module('colorboxApp', [
     };
   })
 
-  .run(function ($rootScope, $location, Auth) {
+  .run(function ($rootScope, $location, Auth, crud) {
     // Redirect to login if route requires auth and you're not logged in
     $rootScope.$on('$stateChangeStart', function (event, next) {
       Auth.isLoggedInAsync(function(loggedIn) {
@@ -52,6 +77,21 @@ angular.module('colorboxApp', [
         }
       });
     });
+
+    $rootScope.waiting = 0;
+    var unreadCount = 0;
+    $rootScope.getUnreadCount = function(){
+      crud.messages.unreadCount()
+        .success(function(d){
+          unreadCount = d.count;
+        });
+    };
+    $rootScope.unreadCount = function(){
+      return unreadCount > 0 ? unreadCount : 0;
+    };
+    $rootScope.read = function(){
+      unreadCount--;
+    };
 
     // 配置ace路径
     ace.config.set('themePath', '/bower_components/ace-builds/src-min/');

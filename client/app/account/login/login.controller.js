@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('colorboxApp')
-  .controller('LoginCtrl', function ($scope, Auth, $location) {
+  .controller('LoginCtrl', function ($scope, Auth, $location,$rootScope) {
     $scope.user = {};
     $scope.errors = {};
 
@@ -16,6 +16,7 @@ angular.module('colorboxApp')
         .then( function() {
           // Logged in, redirect to home
           $location.path('/');
+          $rootScope.getUnreadCount();
         })
         .catch( function(err) {
           $scope.errors.other = err.message;

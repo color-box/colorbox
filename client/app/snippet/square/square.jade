@@ -1,0 +1,29 @@
+div(ng-include='"components/navbar/navbar.html"')
+.container.mtl
+  div.row
+    div.col-md-8.mbl
+      div.btn-group.btn-group-sm
+        a.btn.btn-default(href="/snippet/square?sort={{label.name}}", ng-repeat="label in labels", ng-class="{'btn-primary': currentLabel == label.name}") {{label.text}}
+    div.col-md-4.mbl
+      form
+        div.input-group.input-group-sm
+          div.input-group-btn
+            button.btn.btn-success
+              span.fa.fa-search
+          input.form-control(placeholder="搜索描述")
+  div.row
+    div.col-md-4(ng-repeat="snippet in snippets")
+      div.panel.panel-default
+        div.square__body.square__body--snippet
+          a.square__link(href="/snippet/edit?_id={{snippet._id}}")
+            h4 {{snippet.name || snippet._id}}
+            p {{snippet.desc}}
+          iframe.square__iframe(id="{{snippet._id}}", ng-src="{{snippet.preview}}", width="200%", height="200%", seamless, frameBorder=0, scrolling="no", sandbox="allow-scripts allow-pointer-lock allow-same-origin")
+        div.panel-footer
+          small.pull-right
+            span.fa.fa-eye(title="{{snippet.viewCount}}次浏览") &nbsp;{{snippet.viewCount}}
+            a.fa.fa-heart-o.mll(ng-hide="snippet.hasStar", ng-click="star(snippet._id, snippet)", href="javascript:;", title="喜欢") &nbsp;{{snippet.starsCount}}
+            a.fa.fa-heart.mll(ng-show="snippet.hasStar", ng-click="unstar(snippet._id, snippet)", href="javascript:;", title="取消喜欢") &nbsp;{{snippet.starsCount}}
+          | {{snippet.user}}
+  div.pull-right.pagination(ng-controller="SnippetSquarePaginationCtrl")
+    pagination(total-items="total", ng-model="currentPage", items-per-page="pageSize", ng-change="change()", previous-text="上一页",next-text="下一页")

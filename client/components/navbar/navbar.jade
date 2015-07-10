@@ -7,15 +7,15 @@ div.navbar.navbar-default.navbar-static-top(ng-controller='NavbarCtrl')
 
     div#navbar-main.navbar-collapse.collapse(collapse='isCollapsed')
       ul.nav.navbar-nav
-        li(ng-repeat='item in menu', ng-class='{active: isActive(item.link)}')
+        li(ng-repeat='item in menu', ng-class='{active: isActive(item.state)}')
           a(ng-href='{{item.link}}') {{item.title}}
 
       ul.nav.navbar-nav.navbar-right
-        li(ng-hide='isLoggedIn()', ng-class='{active: isActive("/signup")}')
+        li(ng-hide='isLoggedIn()', ng-class='{active: isActive("signup")}')
           a(href='/signup') 注册
 
-        li(ng-hide='isLoggedIn()', ng-class='{active: isActive("/login")}')
-          a(href='/login') 登陆
+        li(ng-hide='isLoggedIn()', ng-class='{active: isActive("login")}')
+          a(href='/login') 登录
 
         li(ng-show='isLoggedIn()')
           a(href='/profile/messages')
@@ -28,11 +28,11 @@ div.navbar.navbar-default.navbar-static-top(ng-controller='NavbarCtrl')
             span.hidden-sm.hidden-md {{ getCurrentUser().name }}
             b.caret
           ul.dropdown-menu.animated.fadeInRight
-            li(ng-class='{active: isActive("/profile")}')
+            li(ng-class='{active: isActive("profile")}')
               a(href='/profile') 个人中心
-            li(ng-class='{active: isActive("/settings")}')
+            li(ng-class='{active: isActive("settings")}')
               a(href='/settings') 设置
-            li(ng-show='isAdmin()', ng-class='{active: isActive("/admin")}')
+            li(ng-show='isAdmin()', ng-class='{active: isActive("admin")}')
               a(href='/admin') 管理后台
-            li(ng-class='{active: isActive("/logout")}')
+            li
               a(href='', ng-click='logout()') 退出登录

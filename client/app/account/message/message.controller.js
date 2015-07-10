@@ -12,6 +12,16 @@ angular.module('colorboxApp')
         });
     };
 
+    $scope.readAll = function(){
+      crud.messages.readAll()
+        .success(function(){
+          $rootScope.getUnreadCount();
+          $scope.messages.forEach(function(n){
+            n.read || (n.read = true);
+          });
+        });
+    };
+
     $scope.$watch(function(){return $location.search().skip;}, function(skip) {
       getMessages(skip);
     });

@@ -1,0 +1,32 @@
+div(ng-include='"components/navbar/navbar.html"')
+.snippet__main
+  .snippet__view-box
+    iframe( width="100%", height="100%", frameborder="0", ng-src="{{preview}}", preview="{\"reload\": \"reload\"}")
+.snippet__footer.bg-primary
+  .btn-group
+    button.btn.btn-sm.btn-primary(title="刷新", ng-click="reload()")
+      span.fa.fa-refresh
+    button.btn.btn-sm.btn-primary(ng-click="open()")
+      span.fa.fa-ellipsis-h(title="详细和评论") &nbsp;{{snippet.comments.length || 0}}
+    button.btn.btn-primary.btn-sm
+      span.fa.fa-heart-o(ng-hide="snippet.hasStar", ng-click="star(snippet._id, snippet)", title="喜欢") &nbsp;{{snippet.starsCount}}
+      span.fa.fa-heart(ng-show="snippet.hasStar", ng-click="unstar(snippet._id, snippet)", title="取消喜欢") &nbsp;{{snippet.starsCount}}
+    a.btn.btn-primary.btn-sm(href="/snippet/edit?_id={{snippet._id}}", title="编辑")
+      span.fa.fa-pencil
+script#snippet-comments(type="text/ng-template")
+  .modal-body.markdown-body
+    h2{{snippet.name || '片段' + snippet._id}}&nbsp;
+      small 由
+        a(href="/user/{{snippet.user}}") &nbsp;{{snippet.user}}&nbsp;
+        | 在&nbsp;{{snippet.publishDate | date:'yyyy-MM-dd HH:mm:ss'}}&nbsp;发布
+    p {{snippet.desc || '暂无描述'}}
+    p
+      span.fa.fa-eye.mrl &nbsp;{{snippet.viewCount}}
+      a.fa.fa-heart-o.mrl(ng-hide="snippet.hasStar", ng-click="star(snippet._id, snippet)", href="javascript:;", title="喜欢") &nbsp;{{snippet.starsCount}}
+      a.fa.fa-heart.mrl(ng-show="snippet.hasStar", ng-click="unstar(snippet._id, snippet)", href="javascript:;", title="取消喜欢") &nbsp;{{snippet.starsCount}}
+      span.fa.fa-comment &nbsp;{{snippet.comments.length || 0}}
+    div 喜欢的人：&nbsp;
+      a(ng-repeat="(u, n) in snippet.stars", href="/user/{{u}}") {{u}}{{$last ? '' : '，'}}&nbsp;
+  div(comments="snippet.comments", on-comment="comment(data)")
+  .modal-footer
+    button.btn.btn-default(ng-click='cancel()') 关闭

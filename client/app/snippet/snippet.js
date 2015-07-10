@@ -12,5 +12,10 @@ angular.module('colorboxApp')
         url: '/snippet/edit',
         templateUrl: 'app/snippet/edit/edit.html',
         controller: 'SnippetEditCtrl'
+      })
+      .state('snippetView', {
+        url: '/snippet/view',
+        templateUrl: 'app/snippet/view/view.html',
+        controller: 'SnippetViewCtrl'
       });
   });

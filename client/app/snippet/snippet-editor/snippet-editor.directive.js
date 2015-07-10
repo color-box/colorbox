@@ -31,9 +31,20 @@ angular.module('colorboxApp')
           editor.setSession(ace.createEditSession(config.content || ''));
           //editor.renderer.setShowGutter(false);
           editor.renderer.setPadding(10);
+          editor.renderer.setScrollMargin(10);
           editor.session.highlight(false);
           editor.setTheme('ace/theme/chrome');
           editor.session.setMode("ace/mode/" + config.mode);
+          editor.setOption("scrollPastEnd", 1);
+          editor.session.setUseWrapMode(true);
+
+          ace.config.loadModule("ace/ext/language_tools", function(){
+            editor.setOptions({
+              enableBasicAutocompletion: true,
+              enableSnippets: true,
+              enableLiveAutocompletion: true
+            });
+          });
         });
 
         scope.$on('editorSaved:' + attrs.snippetEditor, function(){

@@ -1,11 +1,14 @@
 div(ng-include='"components/navbar/navbar.html"')
 .container
-  p
-    | The delete user and user index api routes are restricted to users with the 'admin' role.
-  ul.list-group
-    li.list-group-item(ng-repeat='user in users')
-      strong {{user.name}}
-      br
-      span.text-muted {{user.email}}
-      a.trash(ng-click='delete(user)')
-        span.fui-trash.pull-right
+  .row.mtl
+    .col-md-4(ng-repeat='user in users')
+      div.panel.panel-default
+        div.panel-body
+          div.pull-left.comments__avator
+            img.img-circle(ng-src="http://identicon.relucks.org/{{ user.name }}?size=40px", alt="{{ user.name }}")
+          div
+            a(href="/user/{{user.name}}")
+              strong {{user.name}}
+          .text-muted {{user.email}}
+        div.panel-footer
+          a.fa.fa-trash(ng-click='delete(user)')

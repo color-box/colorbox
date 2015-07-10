@@ -1,18 +1,22 @@
 'use strict';
 
+'use strict';
+
 angular.module('colorboxApp')
-  .controller('NavbarCtrl', function ($scope, $location, Auth) {
+  .controller('NavbarCtrl', function ($scope, $location, Auth, $state) {
     $scope.menu = [{
-        'title': 'Article',
-        'link': '/article/square'
+        'title': '文章',
+        'link': '/article/square',
+        'state': 'articleSquare'
       },
       {
-        'title': 'Code',
-        'link': '/snippet/square'
-      },
-      {
-        'title': 'Note',
-        'link': '/note/square'
+        'title': '代码片段',
+        'link': '/snippet/square',
+        'state': 'snippetSquare'
+      //},
+      //{
+      //  'title': '笔记',
+      //  'link': '/note/square'
       }
     ];
 
@@ -27,6 +31,6 @@ angular.module('colorboxApp')
     };
 
     $scope.isActive = function(route) {
-      return route === $location.path();
+      return $state.includes(route);
     };
   });

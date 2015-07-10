@@ -66,6 +66,17 @@ exports.update = function(req, res) {
   });
 };
 
+// Updates an existing message in the DB.
+exports.updateList = function(req, res) {
+  Message
+    .where({user: req.user.name, read: false})
+    .setOptions({ multi: true})
+    .update({$set: {read: true}}, function (err, messages) {
+    if (err) { return handleError(res, err); }
+      return res.json(200, true);
+    });
+};
+
 // Deletes a message from the DB.
 exports.destroy = function(req, res) {
   Message.findById(req.params.id, function (err, message) {

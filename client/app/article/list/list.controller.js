@@ -11,7 +11,7 @@ angular.module('colorboxApp')
       crud.articles.del(id)
         .success(function(){
           var skip = $location.search().skip || 1;
-          if($scope.snippets.length === 1 && skip !== 1){
+          if($scope.articles.length === 1 && skip !== 1){
             $location.search('skip', skip - 1);
           }
           getArticles(skip);

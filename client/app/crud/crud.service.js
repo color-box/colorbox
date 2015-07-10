@@ -3,9 +3,17 @@
 angular.module('colorboxApp')
   .factory('crud', function ($http) {
     var Crud = {
+      timelines: {
+        list: function(user, skip){
+          return $http.get('/api/timelines/user?user=' + user+ '&skip=' + skip);
+        }
+      },
       messages: {
         list: function(skip){
           return $http.get('/api/messages/user' + (skip ? ('?skip=' + skip) : ''));
+        },
+        readAll: function(){
+          return $http.post('/api/messages/readAll');
         },
         save: function(data){
           return $http.put('/api/messages/' + data._id, data);
@@ -15,6 +23,17 @@ angular.module('colorboxApp')
         },
         count: function(){
           return $http.get('/api/messages/count');
+        }
+      },
+      settings: {
+        get: function(user){
+          return $http.get('/api/settings/?user=' + user);
+        },
+        add: function(data){
+          return $http.post('/api/settings', data);
+        },
+        save: function(data){
+          return $http.put('/api/settings/' + data._id, data);
         }
       },
       articles: {
@@ -36,11 +55,20 @@ angular.module('colorboxApp')
         getAllArticles: function(skip, sort){
           return $http.get('/api/articles/?sort=' + sort + '&skip=' + skip);
         },
+        getPublicArticlesByUser: function(user, skip){
+          return $http.get('/api/articles/user/publiclist?user=' + user+ '&skip=' + skip);
+        },
         count: function(){
           return $http.get('/api/articles/count');
         },
         countByUser: function(){
           return $http.get('/api/articles/countByUser');
+        },
+        publicCountByUser: function(user){
+          return $http.get('/api/articles/publicCountByUser?user=' + user);
+        },
+        view: function(id){
+          return $http.get('/api/articles/view/' + id);
         },
         star: function(id){
           return $http.get('/api/articles/star/' + id);
@@ -74,11 +102,23 @@ angular.module('colorboxApp')
         getAllSnippets: function(skip, sort){
           return $http.get('/api/snippets/?sort=' + sort + '&skip=' + skip);
         },
+        getAllSnippetsByUser: function(){
+          return $http.get('/api/snippets/user/list');
+        },
+        getPublicSnippetsByUser: function(user, skip){
+          return $http.get('/api/snippets/user/publiclist?user=' + user+ '&skip=' + skip);
+        },
         count: function(){
           return $http.get('/api/snippets/count');
         },
         countByUser: function(){
           return $http.get('/api/snippets/countByUser');
+        },
+        publicCountByUser: function(user){
+          return $http.get('/api/snippets/publicCountByUser?user=' + user);
+        },
+        view: function(id){
+          return $http.get('/api/snippets/view/' + id);
         },
         star: function(id){
           return $http.get('/api/snippets/star/' + id);
@@ -91,6 +131,9 @@ angular.module('colorboxApp')
         },
         publish: function(id){
           return $http.post('/api/snippets/publish/' + id);
+        },
+        updateSettings: function(data){
+          return $http.post('/api/snippets/updateSettings/' + data._id, data);
         }
       }
     };

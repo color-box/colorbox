@@ -3,9 +3,9 @@ div.panel-heading
     span.fa.fa-plus
     |  新增
 div.panel-body
-  div.row
-    div.alert.alert-warning.text-center(ng-hide="articles.length || loading") 您还没有添加文章
-    div.alert.text-center(ng-show="loading") 加载中...
+  div.alert.alert-warning.text-center(ng-hide="articles.length || loading") 您还没有添加文章
+  div.alert.text-center(ng-show="loading") 加载中...
+  .row
     div.col-md-4(ng-repeat="article in articles")
       div.panel.panel-default
         div.panel-body.square__body
@@ -16,6 +16,7 @@ div.panel-body
             h4 {{article.name || '未命名'}}
         div.panel-footer.clearfix
           a.fa.fa-rocket(href="javascript:;", title="发布", ng-click="publish(article)", ng-if="!article.publish")
+          span.fa.fa-rocket(title="已发布", ng-if="article.publish")
           small.pull-right
             a.fa.fa-comment(title="{{article.comments.length || 0}}条评论", href="/article/view?_id={{article._id}}") &nbsp;{{article.comments.length || 0}}
             span.fa.fa-eye.mll(title="有{{snippet.viewCount}}次浏览") &nbsp;{{article.viewCount}}

@@ -3,6 +3,7 @@
 var _ = require('lodash');
 var Article = require('./article.model');
 var Message = require('../message/message.model');
+var Timeline = require('../timeline/timeline.model');
 
 function count(query, res){
   Article.find(query)
@@ -28,6 +29,7 @@ exports.index = function(req, res) {
     .limit(pageSize)
     .sort(sort)
     .skip(((+req.query.skip || 1) - 1) * pageSize)
+    .select({content: 0, comments: 0})
     .exec(function (err, articles) {
       if(err) { return handleError(res, err); }
       return res.json(200, articles);
@@ -42,15 +44,40 @@ exports.countByUser = function(req, res){
   count({user: req.user.name}, res);
 };
 
-// Get list of snippets by user
+// Get list of articles by user
 exports.listByUser = function(req, res) {
+  var pageSize = 6;
+
   Article.find()
     .where({user: req.user.name})
-    .limit(10)
+    .sort({createDate: -1})
+    .limit(pageSize)
+    .skip(((+req.query.skip || 1) - 1) * pageSize)
+    .select({content: 0, comments: 0})
     .exec(function (err, articles) {
       if(err) { return handleError(res, err); }
       return res.json(200, articles);
     });
+};
+
+// Get public list of articles by user
+exports.publicListByUser = function(req, res) {
+  var pageSize = 6;
+
+  Article.find({publish: true})
+    .where({user: req.query.user})
+    .sort({createDate: -1})
+    .limit(pageSize)
+    .skip(((+req.query.skip || 1) - 1) * pageSize)
+    .select({content: 0, comments: 0})
+    .exec(function (err, articles) {
+      if(err) { return handleError(res, err); }
+      return res.json(200, articles);
+    });
+};
+
+exports.publicCountByUser = function(req, res){
+  count({user: req.query.user, publish: true}, res);
 };
 
 // Get a single article
@@ -93,6 +120,14 @@ exports.publish = function(req, res) {
     if(article.user !== req.user.name) { return res.send(403); }
     article.publish = true;
     article.publishDate = new Date();
+
+    // 添加timeline
+    Timeline.create({
+      user: article.user,
+      type: 'article',
+      id: article._id
+    });
+
     article.save(function (err) {
       if (err) { return handleError(res, err); }
       return res.json(200, {});
@@ -109,6 +144,20 @@ exports.destroy = function(req, res) {
     article.remove(function(err) {
       if(err) { return handleError(res, err); }
       return res.send(204);
+    });
+  });
+};
+
+exports.view = function(req, res) {
+  Article.findById(req.params.id, function (err, article) {
+    if (err) { return handleError(res, err); }
+    if(!article) { return res.send(404); }
+
+    article.viewCount++;
+
+    article.save(function (err) {
+      if (err) { return handleError(res, err); }
+      return res.json(200, {viewCount: article.viewCount});
     });
   });
 };

@@ -1,0 +1,6 @@
+.modal-body
+  form(name='articleSettings')
+    input.form-control(ng-model="data.url", type="text", placeholder="{{placeholder}}")
+.modal-footer
+  button.btn.btn-primary(ng-click='submit(snippetSettings)') 保存
+  button.btn.btn-default(ng-click='cancel()') 关闭

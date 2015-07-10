@@ -9,6 +9,7 @@ var router = express.Router();
 router.get('/user', auth.isAuthenticated(), controller.list);
 router.get('/unreadCount', auth.isAuthenticated(), controller.unreadCount);
 router.get('/count', auth.isAuthenticated(), controller.count);
+router.post('/readAll', auth.isAuthenticated(), controller.updateList);
 //router.get('/:id', controller.show);
 //router.post('/', controller.create);
 router.put('/:id', auth.isAuthenticated(), controller.update);

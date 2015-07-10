@@ -13,7 +13,6 @@
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
     <!-- build:css(client) app/vendor.css -->
       <!-- bower:css -->
-      <link rel="stylesheet" href="bower_components/videojs/dist/video-js/video-js.css" />
       <link rel="stylesheet" href="bower_components/flat-ui/dist/css/flat-ui.css" />
       <link rel="stylesheet" href="bower_components/highlightjs/styles/default.css" />
       <link rel="stylesheet" href="bower_components/angularjs-toaster/toaster.css" />
@@ -32,7 +31,7 @@
     <div class="butterbar" ng-class="{active: waiting > 0}"><span class="bar"></span></div>
 
     <!-- Add your site or application content here -->
-    <div ui-view=""></div>
+    <div class="view-container" ui-view=""></div>
     <!-- toaster -->
     <toaster-container></toaster-container>
 
@@ -59,11 +58,8 @@
       <script src="bower_components/angular-cookies/angular-cookies.js"></script>
       <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
       <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
-      <script src="bower_components/lodash/dist/lodash.compat.js"></script>
       <script src="bower_components/angular-socket-io/socket.js"></script>
       <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
-      <script src="bower_components/videojs/dist/video-js/video.js"></script>
-      <script src="bower_components/flat-ui/dist/js/flat-ui.js"></script>
       <script src="bower_components/ace-builds/src-min/ace.js"></script>
       <script src="bower_components/showdown/src/showdown.js"></script>
       <script src="bower_components/showdown/src/extensions/table.js"></script>
@@ -81,7 +77,6 @@
           <script src="app/account/login/login.controller.js"></script>
           <script src="app/account/message/message.controller.js"></script>
           <script src="app/account/profile/profile.controller.js"></script>
-          <script src="app/account/profile/profile.js"></script>
           <script src="app/account/settings/settings.controller.js"></script>
           <script src="app/account/signup/signup.controller.js"></script>
           <script src="app/admin/admin.controller.js"></script>
@@ -90,6 +85,7 @@
           <script src="app/article/edit/edit.controller.js"></script>
           <script src="app/article/list/list.controller.js"></script>
           <script src="app/article/square/square.controller.js"></script>
+          <script src="app/article/user/user.controller.js"></script>
           <script src="app/article/view/view.controller.js"></script>
           <script src="app/crud/crud.service.js"></script>
           <script src="app/main/main.controller.js"></script>
@@ -104,7 +100,9 @@
           <script src="app/snippet/snippet-editor/snippet-editor.directive.js"></script>
           <script src="app/snippet/snippet.js"></script>
           <script src="app/snippet/square/square.controller.js"></script>
+          <script src="app/snippet/user/user.controller.js"></script>
           <script src="app/snippet/view/view.controller.js"></script>
+          <script src="app/timeline/timeline.controller.js"></script>
           <script src="app/user/user.controller.js"></script>
           <script src="app/user/user.js"></script>
           <script src="components/at/at.directive.js"></script>
@@ -114,6 +112,7 @@
           <script src="components/modal/modal.service.js"></script>
           <script src="components/mongoose-error/mongoose-error.directive.js"></script>
           <script src="components/navbar/navbar.controller.js"></script>
+          <script src="components/preview/preview.controller.js"></script>
           <script src="components/socket/socket.service.js"></script>
           <script src="components/splitbox/splitbox.js"></script>
           <!-- endinjector -->

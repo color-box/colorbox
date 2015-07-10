@@ -60,3 +60,59 @@
   .transform-origin(0 0);
   .scale(0.5);
 }
+
+.snippet__main{
+  position: absolute;
+  top: 52px;
+  left: 0;
+  right: 0;
+  bottom: 50px;
+  overflow: hidden;
+}
+
+.animate .snippet__box{
+  .transition(.3s all);
+}
+
+.snippet__box{
+  overflow: hidden;
+  border-style: solid;
+  border-color: #ccc;
+  border-width: 1px 0 0 1px;
+}
+
+.snippet__top{
+  border-bottom: 1px solid #e2e2e2;
+  padding: 5px 10px;
+  white-space: nowrap;
+  font-size: 14px;
+  line-height: 1;
+}
+
+.snippet__middle{
+  position: absolute!important;
+  top: 25px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.snippet__footer{
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 50px;
+  padding: 8px 10px;
+}
+
+.snippet__resource.ng-invalid{
+  color: @brand-danger;
+  border-color: @brand-danger;
+  box-shadow: none;
+}
+
+.snippet__view-box{
+  height: 100%;
+  border: 5px solid @gray-light;
+}

@@ -59,14 +59,14 @@ UserSchema
   .path('email')
   .validate(function(email) {
     return email.length;
-  }, 'Email cannot be blank');
+  }, '邮箱不可为空');
 
 // Validate empty password
 UserSchema
   .path('hashedPassword')
   .validate(function(hashedPassword) {
     return hashedPassword.length;
-  }, 'Password cannot be blank');
+  }, '密码不可为空');
 
 // Validate email is not taken
 UserSchema
@@ -81,7 +81,22 @@ UserSchema
       }
       respond(true);
     });
-}, 'The specified email address is already in use.');
+}, '邮箱已经注册了');
+
+// Validate name is not taken
+UserSchema
+  .path('name')
+  .validate(function(value, respond) {
+    var self = this;
+    this.constructor.findOne({name: value}, function(err, user) {
+      if(err) throw err;
+      if(user) {
+        if(self.id === user.id) return respond(true);
+        return respond(false);
+      }
+      respond(true);
+    });
+  }, '用户名已经注册了');
 
 var validatePresenceOf = function(value) {
   return value && value.length;
@@ -95,7 +110,7 @@ UserSchema
     if (!this.isNew) return next();
 
     if (!validatePresenceOf(this.hashedPassword))
-      next(new Error('Invalid password'));
+      next(new Error('无效密码'));
     else
       next();
   });

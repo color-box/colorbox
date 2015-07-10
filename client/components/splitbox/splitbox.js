@@ -190,8 +190,6 @@
             };
 
             scope[config.exportName] = root;
-
-            console.log(root);
           }
         };
       }

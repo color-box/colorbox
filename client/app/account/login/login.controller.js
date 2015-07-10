@@ -2,6 +2,7 @@
 
 angular.module('colorboxApp')
   .controller('LoginCtrl', function ($scope, Auth, $location,$rootScope) {
+    $scope.first = true;
     $scope.user = {};
     $scope.errors = {};
 

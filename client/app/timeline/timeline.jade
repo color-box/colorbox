@@ -1,0 +1,29 @@
+.row.tl__box
+  .alert.text-center(ng-show="!records.length && !loading") 这个人很懒，什么都没发布
+  .alert.text-center(ng-show="loading") 加载中...
+  .tl__line(ng-show="records.length")
+  .tl.tl--record.item(ng-repeat="record in records")
+    span.tl__mark
+    .tl__time {{record.date | date:'yyyy-MM-dd HH:mm:ss'}}
+    .tl__body(ng-if="record.type === 'article'")
+      | 发布文章&nbsp;
+      a(href="/article/view?_id={{record.item._id}}") {{record.item.name || '未命名'}}
+    .tl__body(ng-if="record.type === 'snippet'")
+      | 发布代码片段
+      span(ng-if="!record.item") {{record.id}}
+      .tl__snippet(ng-if="record.item")
+        a.tl__link(href="/snippet/view?_id={{record.item._id}}")
+          h4 {{record.item.name || record.item._id}}
+          p {{record.item.desc}}
+        iframe.square__iframe(id="{{record.item._id}}", ng-src="{{record.item.preview}}", width="200%", height="200%", seamless, frameBorder=0, scrolling="no", sandbox="allow-scripts allow-pointer-lock allow-same-origin")
+    .tl__footer(ng-if="record.item")
+      a.fa.fa-comment(ng-click="toggleComment(record.item)", title="{{record.item.comments.length || 0}}条评论", href="javascript:;") &nbsp;{{record.item.comments.length || 0}}
+      span.fa.fa-eye.mll(title="{{record.item.viewCount}}次浏览") &nbsp;{{record.item.viewCount}}
+      a.fa.fa-heart-o.mll(ng-hide="record.item.hasStar", ng-click="star(record.item._id, record.item, record.type)", href="javascript:;", title="喜欢") &nbsp;{{record.item.starsCount}}
+      a.fa.fa-heart.mll(ng-show="record.item.hasStar", ng-click="unstar(record.item._id, record.item, record.type)", href="javascript:;", title="取消喜欢") &nbsp;{{record.item.starsCount}}
+      div(ng-if="record.item && commenting === record.item._id", comments="record.item.comments", on-comment="comment(data, record.type, record.item._id)")
+  .col-lg-12.tl__more(ng-show="records.length")
+    .tl__line
+    a.btn.btn-default(ng-show="!loading && showMore", ng-click="getTimelines(skip + 1)") 加载更多
+    a.btn.btn-default(ng-show="loading") 正在加载...
+    a.btn.btn-default(ng-show="!showMore", disabled) 已经没有了

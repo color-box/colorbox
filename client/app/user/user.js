@@ -3,7 +3,7 @@
 angular.module('colorboxApp')
   .config(function ($stateProvider, $urlRouterProvider) {
     $urlRouterProvider
-      .when('/user/:user', '/user/:user/snippets');
+      .when('/user/:user', '/user/:user/timeline');
 
     $stateProvider
       .state('user', {
@@ -11,12 +11,21 @@ angular.module('colorboxApp')
         templateUrl: 'app/user/user.html',
         controller: 'UserCtrl'
       })
+      .state('user.timeline', {
+        url: '/timeline',
+        views: {
+          '': {
+            templateUrl: 'app/timeline/timeline.html',
+            controller: 'TimelineCtrl'
+          }
+        }
+      })
       .state('user.articles', {
         url: '/articles',
         views: {
           '': {
-            templateUrl: 'app/article/list/list.html',
-            controller: 'ArticleListCtrl'
+            templateUrl: 'app/article/user/user.html',
+            controller: 'ArticleUserCtrl'
           }
         }
       })
@@ -24,8 +33,8 @@ angular.module('colorboxApp')
         url: '/snippets',
         views: {
           '': {
-            templateUrl: 'app/snippet/list/list.html',
-            controller: 'SnippetListCtrl'
+            templateUrl: 'app/snippet/user/user.html',
+            controller: 'SnippetUserCtrl'
           }
         }
       })

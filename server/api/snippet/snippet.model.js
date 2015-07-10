@@ -9,15 +9,18 @@ var SnippetSchema = new Schema({
   desc: String,
   html: {
     mode: {type: String, default: 'html'},
-    content: String
+    content: String,
+    resources: {type: Array, default: ['']}
   },
   css: {
     mode: {type: String, default: 'css'},
-    content: String
+    content: String,
+    resources: {type: Array, default: ['']}
   },
   javascript: {
     mode: {type: String, default: 'javascript'},
-    content: String
+    content: String,
+    resources: {type: Array, default: ['']}
   },
   comments: [{content: String, date: Date, user: String, reply: String}],
   stars: Object,

@@ -9,24 +9,27 @@ script#snippet-html(type='text/ng-template')
   .snippet__box
     .snippet__top
       a.fa.fa-close.pull-right(href='javascript:;', title='关闭', ng-click='toggleBlock(0)')
-      a.fa.fa-gear(href='javascript:;', title='设置')
+      a.fa.fa-gear(href='javascript:;', title='设置', ng-click="openSettings('html')")
       |  html
+      span(ng-show="snippet.html.mode !== 'html'") &nbsp;({{snippet.html.mode}})
       span(ng-show='snippet.html.isChange') *
     .snippet__middle(snippet-editor='html')
 script#snippet-css(type='text/ng-template')
   .snippet__box
     .snippet__top
       a.fa.fa-close.pull-right(href='javascript:;', title='关闭', ng-click='toggleBlock(1)')
-      a.fa.fa-gear(href='javascript:;', title='设置')
+      a.fa.fa-gear(href='javascript:;', title='设置', ng-click="openSettings('css')")
       |  css
+      span(ng-show="snippet.css.mode !== 'css'") &nbsp;({{snippet.css.mode}})
       span(ng-show='snippet.css.isChange') *
     .snippet__middle(snippet-editor='css')
 script#snippet-javascript(type='text/ng-template')
   .snippet__box
     .snippet__top
       a.fa.fa-close.pull-right(href='javascript:;', title='关闭', ng-click='toggleBlock(2)')
-      a.fa.fa-gear(href='javascript:;', title='设置')
+      a.fa.fa-gear(href='javascript:;', title='设置', ng-click="openSettings('javascript')")
       |  javascript
+      span(ng-show="snippet.javascript.mode !== 'javascript'") &nbsp;({{snippet.javascript.mode}})
       span(ng-show='snippet.javascript.isChange') *
     .snippet__middle(snippet-editor='javascript')
 script#snippet-result(type='text/ng-template')
@@ -37,7 +40,7 @@ script#snippet-result(type='text/ng-template')
       a.fa.fa-refresh(href='javascript:;', ng-click='reloadIframe();', title='刷新')
       |   result
     .snippet__middle.snippet__result
-      iframe(ng-src='{{preview}}', width='100%', height='100%', frameborder='0')
+      iframe(preview="{\"reload\": \"reloadIframe\"}", ng-src='{{preview}}', width='100%', height='100%', frameborder='0')
 script#snippet-detail(type="text/ng-template")
   .modal-header
     h4.modal-title 代码片段描述

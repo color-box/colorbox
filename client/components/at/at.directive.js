@@ -1,3 +1,5 @@
+'use strict';
+
 angular.module('colorboxApp')
   .directive('at', function($compile, $window){
     var atHtml = '<div class="at">' +

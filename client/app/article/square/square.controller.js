@@ -21,7 +21,6 @@ angular.module('colorboxApp')
         .success(function(articles){
           $scope.articles = articles;
           angular.forEach(articles, function(n, i){
-            n.preview = $sce.trustAsResourceUrl('/api/articles/thumbnail/' + n._id);
             n.hasStar = n.stars && user && (user in n.stars);
           });
         });

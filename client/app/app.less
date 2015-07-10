@@ -26,6 +26,10 @@ body{
     font-family: '微软雅黑';
 }
 
+.view-container{
+  height: 100%;
+}
+
 .h1, h1{
   font-size: 2.25em;
   line-height: 1.2;
@@ -61,17 +65,67 @@ body{
 @import 'article/edit/edit.less';
 @import 'article/view/view.less';
 @import 'main/main.less';
-@import 'snippet/edit/edit.less';
 @import 'snippet/snippet-editor/snippet-editor.less';
-@import 'snippet/square/square.less';
+@import 'snippet/snippet.less';
+@import 'timeline/timeline.less';
 @import 'user/user.less';
 @import 'at/at.less';
 @import 'comments/comments.less';
 @import 'modal/modal.less';
 // endinjector
 
+::-webkit-scrollbar-thumb {
+  border: solid 0 rgba(0, 0, 0, 0);
+  border-right-width: 4px;
+  border-left-width: 4px;
+  -webkit-border-radius: 9px 4px;
+  -webkit-box-shadow: inset 0 0 0 1px rgba(128, 128, 128, 0.2), inset 0 0 0 4px rgba(128, 128, 128, 0.2);
+}
+::-webkit-scrollbar {
+  background: none;
+  width: 16px;
+  height: 16px;
+}
+::-webkit-scrollbar-corner {
+  background: rgba(0, 0, 0, 0);
+}
+::-webkit-scrollbar-track-piece {
+  margin: 4px 0;
+}
+
+div.ace_tooltip{
+  font-size: 12px;
+  background: #FFF;
+  border-color: #CCC;
+  color: #666;
+
+  > hr{
+    margin-top: 5px;
+    margin-bottom: 5px;
+  }
+}
+
+div.ace_editor.ace_autocomplete .ace_completion-highlight{
+  color: #1ABC9C;
+  text-shadow: none;
+}
+
+body{
+  background-color: #f0f3f4;
+}
+
+.navbar-default{
+  background-color: #fff;
+
+  .dropdown-menu{
+    background-color: #fff;
+  }
+}
+
 .butterbar {
-  position: relative;
+  position: fixed;
+  top: 0;
+  width: 100%;
   height: 3px;
   margin-bottom: -3px;
   z-index: 1001;
@@ -95,20 +149,14 @@ body{
 }
 
 .butterbar.active {
-  -webkit-animation: changebar 2.25s infinite .75s;
-  -moz-animation: changebar 2.25s infinite .75s;
   animation: changebar 2.25s infinite .75s
 }
 
 .butterbar.active .bar {
-  -webkit-animation: changebar 2.25s infinite;
-  -moz-animation: changebar 2.25s infinite;
   animation: changebar 2.25s infinite
 }
 
 .butterbar.active .bar:before {
-  -webkit-animation: movingbar .75s infinite;
-  -moz-animation: movingbar .75s infinite;
   animation: movingbar .75s infinite
 }
 

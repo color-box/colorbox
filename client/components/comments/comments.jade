@@ -4,16 +4,17 @@ div.comments
     div.comments__item(ng-repeat="comment in comments")
       div.pull-left.comments__avator
         img.img-circle(ng-src="http://identicon.relucks.org/{{ comment.user }}?size=40px", alt="{{ comment.user }}")
-      div.comments__user {{comment.user}}
+      div.comments__user
+        a(href="/user/{{comment.user}}") {{comment.user}}
       div.comments__date {{comment.date | date:'yyyy-MM-dd HH:mm:ss'}}
-      div.comments__body {{comment.content}}
+      div.comments__body.markdown-body(markdown-preview="comment.content")
       div.comments__footer(ng-show="isLoggedIn")
         a.fa.fa-reply(href="javascript:;", title="@{{comment.user}}")
-    div.panel.panel-default
+    div.panel.panel-default.mbs
       div.panel-body.text-center(ng-hide="isLoggedIn") 评论前，请先
         a(href="/login") &nbsp;登录
       form(name="form", ng-submit="onSubmit(form)", ng-show="isLoggedIn")
         div.panel-body
-            textarea.form-control.no-border(placeholder="输入评论...", rows=3, ng-model="data.content", required)
+          textarea.form-control.no-border(placeholder="评论支持markdown格式化", rows=3, ng-model="data.content", required)
         div.panel-footer.clearfix
           button.btn.btn-primary.btn-sm.pull-right(type='submit') 评论

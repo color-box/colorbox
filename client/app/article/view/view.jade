@@ -2,6 +2,31 @@ div.article
   div.article__toggle.btn-group
     button.btn.btn-default.btn-sm(ng-repeat='item in layoutConfig.boxs track by $index', ng-if='item.title', ng-class="{'btn-primary': !item.isHide}", ng-click='toggleBlock($index)') {{item.title}}
   div.article__main(split-box='layoutConfig')
-include ../../template/template.jade
+script#article-preview-pro(type='text/ng-template')
+  .split-box.article__preview
+    div
+      .content.markdown-body(markdown-preview='html', markdown-preview-table='table')
+      .text-center.mtl.mbl
+        button.btn.btn-primary(ng-if="!currentFile.hasStar", ng-click="star(currentFile._id, currentFile)", title="喜欢")
+          span.fa.fa-heart-o
+          |  &nbsp;{{currentFile.starsCount}}
+        button.btn.btn-primary(ng-if="currentFile.hasStar", ng-click="unstar(currentFile._id, currentFile)", title="取消喜欢")
+          span.fa.fa-heart
+          |  &nbsp;{{currentFile.starsCount}}
+      .markdown-body.panel.panel-default
+        .panel-body
+          div
+            span.fa.fa-heart
+            | ：
+            a(ng-repeat="(u, n) in currentFile.stars", href="/user/{{u}}") {{u}}{{$last ? '' : '，'}}&nbsp;
+          div 作者：
+            a(href="/user/{{currentFile.user}}") {{currentFile.user}}
+            //| {{currentFile.createDate | date:'yyyy-MM-dd HH:mm:ss'}}
+script#article-table(type='text/ng-template')
+  .col-lg-12(style="overflow: auto;")
+    h3 目录
+    ul.article__preview__table
+      li(ng-repeat='item in table', style="margin-left: {{(item[0] - 1) * 20 + 'px'}}; display: block;")
+        a(href="{{'#' + item[1]}}") {{item[1]}}
 script#article-comments(type='text/ng-template')
-  div(comments="currentFile.comments", on-comment="comment(data)")
+  div(comments="currentFile.comments", on-comment="comment(data)", style="padding-top: 40px;")

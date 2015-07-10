@@ -1,0 +1,18 @@
+div.row
+  div.alert.text-center(ng-hide="articles.length || loading") 这个人没有文章
+  div.alert.text-center(ng-show="loading") 加载中...
+  div.col-md-4(ng-repeat="article in articles")
+    div.panel.panel-default
+      div.panel-body
+        a(href="/article/view?_id={{article._id}}")
+          h4 {{article.name || '未命名'}}
+      div.panel-footer
+        small.pull-right
+          span.fa.fa-comment(title="{{article.comments.length || 0}}条评论") &nbsp;{{article.comments.length || 0}}
+          span.fa.fa-eye.mll(title="{{article.viewCount}}次浏览") &nbsp;{{article.viewCount}}
+          a.fa.fa-heart-o.mll(ng-hide="article.hasStar", ng-click="star(article._id, article)", href="javascript:;", title="喜欢") &nbsp;{{article.starsCount}}
+          a.fa.fa-heart.mll(ng-show="article.hasStar", ng-click="unstar(article._id, article)", href="javascript:;", title="取消喜欢") &nbsp;{{article.starsCount}}
+        a(href="/user/{{article.user}}"){{article.user}}
+div.pagination.pull-right(ng-controller="ArticleUserPaginationCtrl")
+  pagination(total-items="total", ng-model="currentPage", items-per-page="pageSize", ng-change="change()", previous-text="上一页",next-text="下一页")
+

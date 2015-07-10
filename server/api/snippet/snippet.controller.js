@@ -4,6 +4,7 @@ var _ = require('lodash');
 var Snippet = require('./snippet.model');
 var page = require('./snippet.template');
 var Message = require('../message/message.model');
+var Timeline = require('../timeline/timeline.model');
 
 function count(query, res){
   Snippet.find(query)
@@ -29,8 +30,9 @@ exports.index = function(req, res) {
     .limit(pageSize)
     .sort(sort)
     .skip(((+req.query.skip || 1) - 1) * pageSize)
+    .select({html: 0, css: 0, javascript: 0, comments: 0})
     .exec(function (err, snippets) {
-    if(err) { return handleError(res, err); }
+      if(err) { return handleError(res, err); }
     return res.json(200, snippets);
   });
 };
@@ -60,17 +62,53 @@ exports.thumbnail = function(req, res){
 };
 
 // Get list of snippets by user
+exports.listAllByUser = function(req, res) {
+  var pageSize = 6;
+
+  Snippet.find()
+    .where({user: req.user.name})
+    .sort({createDate: -1})
+    .select({html: 0, css: 0, javascript: 0, comments: 0})
+    .exec(function (err, snippets) {
+      if(err) { return handleError(res, err); }
+      return res.json(200, snippets);
+    });
+};
+
+// Get list of snippets by user
 exports.listByUser = function(req, res) {
   var pageSize = 6;
 
   Snippet.find()
     .where({user: req.user.name})
+    .sort({createDate: -1})
     .limit(pageSize)
     .skip(((+req.query.skip || 1) - 1) * pageSize)
+    .select({html: 0, css: 0, javascript: 0, comments: 0})
     .exec(function (err, snippets) {
       if(err) { return handleError(res, err); }
       return res.json(200, snippets);
     });
+};
+
+// Get public list of snippets by user
+exports.publicListByUser = function(req, res) {
+  var pageSize = 6;
+
+  Snippet.find({publish: true})
+    .where({user: req.query.user})
+    .sort({createDate: -1})
+    .limit(pageSize)
+    .skip(((+req.query.skip || 1) - 1) * pageSize)
+    .select({html: 0, css: 0, javascript: 0, comments: 0})
+    .exec(function (err, snippets) {
+      if(err) { return handleError(res, err); }
+      return res.json(200, snippets);
+    });
+};
+
+exports.publicCountByUser = function(req, res){
+  count({user: req.query.user, publish: true}, res);
 };
 
 // Get a single snippet
@@ -106,6 +144,27 @@ exports.update = function(req, res) {
   });
 };
 
+// Updates an existing snippet's settings in the DB.
+exports.updateSettings = function(req, res) {
+  Snippet.findById(req.params.id, function (err, snippet) {
+    if (err) { return handleError(res, err); }
+    if(!snippet) { return res.send(404); }
+    if(snippet.user !== req.user.name) { return res.send(403); }
+
+    snippet.html.mode = req.body.html.mode;
+    snippet.html.resources = req.body.html.resources;
+    snippet.css.mode = req.body.css.mode;
+    snippet.css.resources = req.body.css.resources;
+    snippet.javascript.mode = req.body.javascript.mode;
+    snippet.javascript.resources = req.body.javascript.resources;
+
+    snippet.save(function (err) {
+      if (err) { return handleError(res, err); }
+      return res.json(200, snippet);
+    });
+  });
+};
+
 exports.publish = function(req, res) {
   Snippet.findById(req.params.id, function (err, snippet) {
     if (err) { return handleError(res, err); }
@@ -113,6 +172,14 @@ exports.publish = function(req, res) {
     if(snippet.user !== req.user.name) { return res.send(403); }
     snippet.publish = true;
     snippet.publishDate = new Date();
+
+    // 添加timeline
+    Timeline.create({
+      user: snippet.user,
+      type: 'snippet',
+      id: snippet._id
+    });
+
     snippet.save(function (err) {
       if (err) { return handleError(res, err); }
       return res.json(200, {});
@@ -150,7 +217,7 @@ exports.star = function(req, res) {
       user: snippet.user,
       infos: [{text: req.user.name, url: '/user/' + req.user.name},
         {text: '喜欢你的代码片段'},
-        {text: snippet.name, url: '/snippet/edit?_id=' + snippet._id}]
+        {text: snippet.name, url: '/snippet/view?_id=' + snippet._id}]
     });
 
     snippet.update(setO, function (err) {
@@ -180,6 +247,20 @@ exports.unstar = function(req, res) {
   });
 };
 
+exports.view = function(req, res) {
+  Snippet.findById(req.params.id, function (err, snippet) {
+    if (err) { return handleError(res, err); }
+    if(!snippet) { return res.send(404); }
+
+    snippet.viewCount++;
+
+    snippet.save(function (err) {
+      if (err) { return handleError(res, err); }
+      return res.json(200, {viewCount: snippet.viewCount});
+    });
+  });
+};
+
 // 添加评论
 exports.comment = function(req, res){
   Snippet.findById(req.params.id, function (err, snippet) {
@@ -197,7 +278,7 @@ exports.comment = function(req, res){
       user: snippet.user,
       infos: [{text: req.user.name, url: '/user/' + req.user.name},
         {text: '评论了你的代码片段'},
-        {text: snippet.name, url: '/snippet/edit?_id=' + snippet._id}]
+        {text: snippet.name, url: '/snippet/view?_id=' + snippet._id}]
     });
 
     snippet.update(opera, function (err) {

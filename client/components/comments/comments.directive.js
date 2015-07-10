@@ -1,3 +1,5 @@
+'use strict';
+
 angular.module('colorboxApp')
 .directive('comments', function(){
     return {
@@ -16,6 +18,7 @@ angular.module('colorboxApp')
             $scope.submit({data: $scope.data})
               .success(function(comment){
                 $scope.comments.push(comment);
+                $scope.data = {};
               });
           }
         };

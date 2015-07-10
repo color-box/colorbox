@@ -14,30 +14,10 @@ angular.module('colorboxApp')
               $timeout(function(){
                 element[0].focus();
                 element[0].select();
+                scope[attrs.autoFocus] = false;
               }, 0);
             }
           });
-        }
-      };
-    }
-  ])
-
-  .factory('toAnchor',
-  ['$location',
-    function($location){
-      return function(anchor){
-        return '#' + $location.url().split('#')[0] + anchor;
-      }
-    }
-  ])
-
-  .directive('anchor',
-  ['toAnchor',
-    function(toAnchor){
-      return {
-        restrict: 'A',
-        link: function(scope, element, attrs){
-          element[0].href = toAnchor(scope.$eval(attrs.anchor));
         }
       };
     }
@@ -67,7 +47,7 @@ angular.module('colorboxApp')
     animateClass: 'animate',
     boxs: [
       {id: 1, size: 60},
-      {id: 4, parentId: 1, template: 'article-list', title: '列表', size: 20, isHide: true},
+      //{id: 4, parentId: 1, template: 'article-list', title: '列表', size: 20, isHide: true},
       {id: 3, parentId: 1, template: 'article-editor', title: '编辑', size: 40, isHide: false},
       {id: 2, parentId: 1, template: 'article-preview', title: '预览', size: 40, isHide: false},
       {id: 5, template: 'article-console', title: '日志', size: 40, isHide: true}
@@ -92,34 +72,29 @@ angular.module('colorboxApp')
   ])
 
   .controller('ArticleEditCtrl',
-  ['$scope', '$location','article::layoutConfig', 'article::functions', 'crud', '$timeout', 'safeApply',
-    function($scope,   $location,   layoutConfig,    functions,   crud,   $timeout,   safeApply){
-      //$scope.dialog = dialog({
-      //  template: 'edit-article-dialog',
-      //  scope: $scope,
-      //  maxWidth: '600px'
-      //});
+  ['$scope', '$location','article::layoutConfig', 'article::functions', 'crud', '$timeout', 'safeApply', '$modal',
+    function($scope,   $location,   layoutConfig,    functions,   crud,   $timeout,   safeApply, $modal){
       $scope.prompts = [];
       $scope.currentFile = {};
 
       //获取文档列表
-      crud.articles.getArticles()
-        .success(function(articles){
-          $scope.files = articles;
-        });
+      //crud.articles.getArticles()
+      //  .success(function(articles){
+      //    $scope.files = articles;
+      //  });
 
       //获取当前编辑文档
       if($location.search()._id){
         crud.articles.get($location.search()._id)
           .success(function(article){
             $scope.currentFile = article;
-            if($scope.files){
-              for(var i = 0, len = $scope.files.length; i < len; i++){
-                if($scope.files[i]._id === $scope.currentFile._id){
-                  $scope.files[i] = $scope.currentFile;
-                }
-              }
-            }
+            //if($scope.files){
+            //  for(var i = 0, len = $scope.files.length; i < len; i++){
+            //    if($scope.files[i]._id === $scope.currentFile._id){
+            //      $scope.files[i] = $scope.currentFile;
+            //    }
+            //  }
+            //}
           });
       }else{
         $timeout(function(){
@@ -142,12 +117,30 @@ angular.module('colorboxApp')
         editingName: false
       };
 
-      //$scope.dialogOpen = function(type){
-      //  $scope.dialogType = type;
-      //  $scope.$broadcast('dialogOpen', type);
-      //  $scope.dialog.open();
-      //  safeApply.apply($scope);
-      //};
+      $scope.dialogOpen = function(type){
+        var modalInstance = $modal.open({
+          templateUrl: 'app/article/edit/settings.html',
+          controller: 'ArticleEditSettingsCtrl',
+          size: 'md',
+          resolve: {
+            data: function(){
+              return {type: type}
+            }
+          }
+        });
+
+        modalInstance.result.then(function(data){
+          if(data){
+            if(data.type === 'image') {
+              var url = data.url || '';
+              $scope.replaceText(['![%s](' + url + ')', '图片描述']);
+            }else if(data.type === 'link'){
+              var url = data.url || $location.absUrl();
+              $scope.replaceText(['[%s](' + url + ')', '链接']);
+            }
+          }
+        });
+      };
 
       $scope.keydownSaveName = function(e){
         if(e.keyCode === 13){
@@ -211,30 +204,30 @@ angular.module('colorboxApp')
         $scope.status.editingName = mark;
       };
 
-      $scope.$watch(function(){return $location.search()._id;}, function(id){
-        if(!id || !$scope.files || $scope.currentFile._id === id) return;
+      //$scope.$watch(function(){return $location.search()._id;}, function(id){
+      //  if(!id || !$scope.files || $scope.currentFile._id === id) return;
+      //
+      //  for(var i = 0, len = $scope.files.length; i < len; i++){
+      //    if($scope.files[i]._id === id){
+      //      break;
+      //    }
+      //  }
+      //
+      //  $scope.files[i] && ($scope.currentFile = $scope.files[i]);
+      //
+      //  if(angular.isUndefined($scope.currentFile.content)){
+      //    crud.articles.get( $scope.currentFile._id)
+      //      .success(function(article){
+      //        $scope.files[i] = $scope.currentFile = article;
+      //      });
+      //  }
+      //});
 
-        for(var i = 0, len = $scope.files.length; i < len; i++){
-          if($scope.files[i]._id === id){
-            break;
-          }
-        }
-
-        $scope.files[i] && ($scope.currentFile = $scope.files[i]);
-
-        if(angular.isUndefined($scope.currentFile.content)){
-          crud.articles.get( $scope.currentFile._id)
-            .success(function(article){
-              $scope.files[i] = $scope.currentFile = article;
-            });
-        }
-      });
-
-      $scope.selectFile = function(_id){
-        if($scope.currentFile._id === _id) return;
-
-        $location.search('_id', _id);
-      };
+      //$scope.selectFile = function(_id){
+      //  if($scope.currentFile._id === _id) return;
+      //
+      //  $location.search('_id', _id);
+      //};
 
       $scope.disable = function(fun){
         return $scope.$eval(fun.disable);
@@ -332,7 +325,7 @@ angular.module('colorboxApp')
               message: '新增文档成功',
               status: 'success'
             });
-            $scope.files.push(article);
+            //$scope.files.push(article);
             $scope.currentFile = article;
             $location.search('_id', article._id);
           });
@@ -353,8 +346,8 @@ angular.module('colorboxApp')
                 message: '删除' + id + '成功',
                 status: 'success'
               });
-              $scope.files.splice(index, 1);
-              $scope.selectFile($scope.files[0]._id);
+              //$scope.files.splice(index, 1);
+              //$scope.selectFile($scope.files[0]._id);
             });
         }
       };
@@ -367,51 +360,27 @@ angular.module('colorboxApp')
     }
   ])
 
-  .controller('editArticleLinkCtrl',
-  ['$scope', 'safeApply',
-    function($scope,   safeApply){
-      var defaultLink = 'http://colorpeach.com';
-      $scope.link = defaultLink;
+  .controller('ArticleEditSettingsCtrl', function($scope, $modalInstance, data){
+    $scope.data = data;
 
-      $scope.$on('dialogOpen', function(e, type){
-        if(type === 'link'){
-          $scope.$parent.dialog.setOption('onClose', function(){
-            $scope.link = defaultLink;
-            $scope.$parent.dialogType = '';
-            safeApply.call($scope.$parent);
-          });
-        }
-      });
-
-      $scope.submit = function(){
-        $scope.replaceText(['[%s](' + $scope.link + ')', '链接']);
-        $scope.$parent.dialog.close();
-      };
+    if(data.type === 'link'){
+      $scope.placeholder = '请输入链接';
+    }else{
+      $scope.placeholder = '请输入图片地址';
     }
-  ])
 
-  .controller('editArticleImageCtrl',
-  ['$scope', 'safeApply',
-    function($scope,   safeApply){
-      var defaultImage = 'http://www.baidu.com/img/bd_logo1.png';
-      $scope.image = defaultImage;
+    $scope.$on('$stateChangeStart', function(){
+      $scope.cancel();
+    });
 
-      $scope.$on('dialogOpen', function(e, type){
-        if(type === 'image'){
-          $scope.$parent.dialog.setOption('onClose', function(){
-            $scope.image = defaultImage;
-            $scope.$parent.dialogType = '';
-            safeApply.call($scope.$parent);
-          });
-        }
-      });
+    $scope.submit = function(){
+      $modalInstance.close($scope.data);
+    };
 
-      $scope.submit = function(){
-        $scope.replaceText(['![%s](' + $scope.image + ')', '图片描述']);
-        $scope.$parent.dialog.close();
-      };
-    }
-  ])
+    $scope.cancel = function(){
+      $modalInstance.dismiss('cancel');
+    };
+  })
 
   .directive('articleEditor',
   ['$timeout', '$sce', 'safeApply',
@@ -425,7 +394,9 @@ angular.module('colorboxApp')
           scope.editor = editor;
 
           editor.renderer.setShowGutter(false);
-          editor.renderer.setPadding(10);
+          editor.renderer.setPadding(20);
+          editor.renderer.setScrollMargin(20);
+          editor.setOption("scrollPastEnd", .9);
           editor.session.highlight(false);
           editor.setTheme('ace/theme/chrome');
 
@@ -466,13 +437,22 @@ angular.module('colorboxApp')
               }
               editor.setSession(file.editSession);
               editor.session.setMode("ace/mode/markdown");
+              editor.session.setUseWrapMode(true);
               editor.focus();
               scope.html =  editor.getValue();
-            }
-          });
 
-          editor.renderer.scrollBar.on('scroll', function(){
-            console.log(arguments);
+              ace.config.loadModule("ace/ext/language_tools", function(){
+                editor.setOptions({
+                  enableBasicAutocompletion: true,
+                  enableSnippets: true,
+                  enableLiveAutocompletion: true
+                });
+              });
+
+              editor.session.on('changeScrollTop', function(){
+
+              });
+            }
           });
 
           scope.$on('resizeUpdate', resize);
@@ -531,8 +511,8 @@ angular.module('colorboxApp')
   ])
 
   .factory('markdownDiagram',
-  ['$q', 'toAnchor',
-    function($q,   toAnchor){
+  ['$q',
+    function($q){
       var codeReg = /<code class="(.+?)">([\S\s]*?)<\/code>/g;
       var hashReg = /<a href="(#.+?)">/g;
       var hReg = /<h([1-6])>(.+?)<\/h\1>/g;
@@ -626,7 +606,7 @@ angular.module('colorboxApp')
         var hs = [];
 
         mdStr = mdStr.replace(hashReg, function(match, hash){
-          return match.replace(hash, toAnchor(hash));
+          return match.replace(hash, '#' + hash);
         });
         //给没有id的h1~h6加上id
         mdStr = mdStr.replace(hReg, function(match, h, hContent){

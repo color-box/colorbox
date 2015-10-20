@@ -32,7 +32,7 @@ script#edit-article-dialog(type='text/ng-template')
         .prompt__item--alert(ng-show='linkForm.link.$error.url') 格式错误
       label.form__label(for='edit-article-link-ctrl') 链接
       .form-group
-        input#edit-article-link-ctrl.form-control(type='url', name='link', required='required', auto-focus="$parent.dialogType === 'link'", ng-model='link', placeholder='例如：http://colorbox.colorpeach.com')
+        input#edit-article-link-ctrl.form-control(type='url', name='link', required='required', auto-focus="$parent.dialogType === 'link'", ng-model='link', placeholder='例如：http://www.upupbox.com')
       button.btn.btn-primary(type='submit') 插入
   div(ng-show="dialogType === 'image'")
     form.form__full(name='imageForm', ng-submit='submit()', ng-controller='editArticleImageCtrl')

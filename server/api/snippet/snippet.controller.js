@@ -30,10 +30,10 @@ exports.index = function(req, res) {
     .limit(pageSize)
     .sort(sort)
     .skip(((+req.query.skip || 1) - 1) * pageSize)
-    .select({html: 0, css: 0, javascript: 0, comments: 0})
+    .select({html: 0, css: 0, javascript: 0})
     .exec(function (err, snippets) {
       if(err) { return handleError(res, err); }
-    return res.json(200, snippets);
+      return res.json(200, snippets);
   });
 };
 
@@ -84,7 +84,7 @@ exports.listByUser = function(req, res) {
     .sort({createDate: -1})
     .limit(pageSize)
     .skip(((+req.query.skip || 1) - 1) * pageSize)
-    .select({html: 0, css: 0, javascript: 0, comments: 0})
+    .select({html: 0, css: 0, javascript: 0})
     .exec(function (err, snippets) {
       if(err) { return handleError(res, err); }
       return res.json(200, snippets);
@@ -100,7 +100,7 @@ exports.publicListByUser = function(req, res) {
     .sort({createDate: -1})
     .limit(pageSize)
     .skip(((+req.query.skip || 1) - 1) * pageSize)
-    .select({html: 0, css: 0, javascript: 0, comments: 0})
+    .select({html: 0, css: 0, javascript: 0})
     .exec(function (err, snippets) {
       if(err) { return handleError(res, err); }
       return res.json(200, snippets);
@@ -136,7 +136,7 @@ exports.update = function(req, res) {
     if (err) { return handleError(res, err); }
     if(!snippet) { return res.send(404); }
     if(snippet.user !== req.user.name) { return res.send(403); }
-    var updated = _.merge(snippet, req.body);
+    var updated = merge(snippet, req.body);
     updated.save(function (err) {
       if (err) { return handleError(res, err); }
       return res.json(200, snippet);
@@ -150,15 +150,8 @@ exports.updateSettings = function(req, res) {
     if (err) { return handleError(res, err); }
     if(!snippet) { return res.send(404); }
     if(snippet.user !== req.user.name) { return res.send(403); }
-
-    snippet.html.mode = req.body.html.mode;
-    snippet.html.resources = req.body.html.resources;
-    snippet.css.mode = req.body.css.mode;
-    snippet.css.resources = req.body.css.resources;
-    snippet.javascript.mode = req.body.javascript.mode;
-    snippet.javascript.resources = req.body.javascript.resources;
-
-    snippet.save(function (err) {
+    var updated = merge(snippet, req.body);
+    updated.save(function (err) {
       if (err) { return handleError(res, err); }
       return res.json(200, snippet);
     });
@@ -292,4 +285,18 @@ exports.comment = function(req, res){
 
 function handleError(res, err) {
   return res.send(500, err);
+}
+
+function merge(source, copy){
+  for(var key in copy){
+    if(_.isArray(copy[key])){
+      source[key] = merge(source[key] || [], copy[key]);
+    }else if(_.isPlainObject(copy[key])){
+      source[key] = merge(source[key] || {}, copy[key]);
+    }else{
+      source[key] = copy[key];
+    }
+  }
+
+  return source;
 }

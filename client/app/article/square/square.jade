@@ -10,7 +10,7 @@ div(ng-include='"components/navbar/navbar.html"')
             h4 {{article.name || '未命名'}}
         div.panel-footer
           small.pull-right
-            //span.fa.fa-comment(title="{{article.comments.length || 0}}条评论") &nbsp;{{article.comments.length || 0}}
+            span.fa.fa-comment(title="{{article.comments.length || 0}}条评论") &nbsp;{{article.comments.length || 0}}
             span.fa.fa-eye.mll(title="{{article.viewCount}}次浏览") &nbsp;{{article.viewCount}}
             a.fa.fa-heart-o.mll(ng-hide="article.hasStar", ng-click="star(article._id, article)", href="javascript:;", title="喜欢") &nbsp;{{article.starsCount}}
             a.fa.fa-heart.mll(ng-show="article.hasStar", ng-click="unstar(article._id, article)", href="javascript:;", title="取消喜欢") &nbsp;{{article.starsCount}}

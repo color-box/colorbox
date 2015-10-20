@@ -183,7 +183,7 @@ angular.module('colorboxApp')
 
     $scope.search = function() {
       if(!$scope.showCdn) {
-        $scope.cdnSearch = $sce.trustAsResourceUrl('https://cdnjs.com/libraries');
+        $scope.cdnSearch = $sce.trustAsResourceUrl('http://www.staticfile.org/');
       }
       $scope.showCdn = !$scope.showCdn;
     }

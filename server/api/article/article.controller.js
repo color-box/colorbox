@@ -29,7 +29,6 @@ exports.index = function(req, res) {
     .limit(pageSize)
     .sort(sort)
     .skip(((+req.query.skip || 1) - 1) * pageSize)
-    .select({content: 0, comments: 0})
     .exec(function (err, articles) {
       if(err) { return handleError(res, err); }
       return res.json(200, articles);
@@ -53,7 +52,7 @@ exports.listByUser = function(req, res) {
     .sort({createDate: -1})
     .limit(pageSize)
     .skip(((+req.query.skip || 1) - 1) * pageSize)
-    .select({content: 0, comments: 0})
+    .select({content: 0})
     .exec(function (err, articles) {
       if(err) { return handleError(res, err); }
       return res.json(200, articles);
@@ -69,7 +68,7 @@ exports.publicListByUser = function(req, res) {
     .sort({createDate: -1})
     .limit(pageSize)
     .skip(((+req.query.skip || 1) - 1) * pageSize)
-    .select({content: 0, comments: 0})
+    .select({content: 0})
     .exec(function (err, articles) {
       if(err) { return handleError(res, err); }
       return res.json(200, articles);
